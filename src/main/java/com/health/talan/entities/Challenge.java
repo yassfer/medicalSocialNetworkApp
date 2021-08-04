@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -32,7 +33,8 @@ public class Challenge implements Serializable {
 	private String nom;
 	@Column(name = "objectif")
 	private String objectif;
-	@Column(name = "pieceJoint")
+	@Column(name = "pieceJoint", nullable = true)
+	@Lob
 	private byte[] pieceJoint;
 	@ManyToOne
 	@JoinColumn(name = "id_adminChallenge")
