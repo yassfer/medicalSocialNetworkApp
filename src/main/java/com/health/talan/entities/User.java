@@ -71,7 +71,7 @@ public class User implements Serializable {
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "adminCom", fetch = FetchType.EAGER)
 	private Set<Community> myCommunities;
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy="participants")
 	private Set<Community> communitiesParticipate;
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
