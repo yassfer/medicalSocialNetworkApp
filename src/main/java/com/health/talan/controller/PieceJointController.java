@@ -14,14 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
 @Controller
-@RequestMapping("/pieceJoint")
+@RequestMapping("api/pieceJoint")
 public class PieceJointController {
 
 
@@ -53,13 +51,60 @@ public class PieceJointController {
 
 
 
-    @PostMapping("/uploadMultiplePieceJoints")
-    public List<ResponseEntity<ResponseMessage>> uploadMultiplePieceJoints(@RequestParam("pieceJoints") MultipartFile[] pieceJoints) {
-        return Arrays.stream(pieceJoints)
-                .map(pieceJoint -> uploadFile(pieceJoint))
-                .collect(Collectors.toList());
-    }
 
+    /*@GetMapping("/files")
+    public ResponseEntity<List<ResponsePieceJoint>> getListFiles() {
+        List<ResponseMessage> pieceJoints = pieceJointServiceImpl.loadAll().map(path -> {
+            String filename = path.getFileName().toString();
+            String url = MvcUriComponentsBuilder
+                    .fromMethodName(PieceJointController.class, "getFile", path.getFileName().toString()).build().toString();
+
+            return new PieceJoint(filename, url);
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.OK).body(pieceJoints);
+    }*/
+
+
+    /*@PostMapping("/uploadFiles")
+    public ResponseEntity<ResponseMessage> uploadFiles(@RequestParam("files") MultipartFile[] files) {
+        String message = "";
+        try {
+            List<String> fileNames = new ArrayList<>();
+
+            Arrays.asList(files).stream().forEach(file -> {
+                pieceJointServiceImpl.SaveFile(file);
+                fileNames.add(file.getOriginalFilename());
+            });
+
+            message = "Uploaded the files successfully: " + fileNames;
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+        } catch (Exception e) {
+            message = "Fail to upload files!";
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+        }
+    }*/
+
+
+    @PostMapping("/files")
+    public String uploadMultiplePieceJoints(@RequestParam("files") MultipartFile[] pieceJoints) {
+        String msg = "";
+        for (MultipartFile pieceJoint : Arrays.asList(pieceJoints)) {
+            String message = "";
+            try {
+                pieceJointServiceImpl.store(pieceJoint);
+
+                message = "Uploaded the pieceJoint successfully: " + pieceJoint.getOriginalFilename();
+                msg = message;
+                continue;
+            } catch (Exception e) {
+                message = "Could not upload the pieceJoint: " + pieceJoint.getOriginalFilename() + "!";
+                msg = message;
+                continue;
+            }
+        }
+        return msg;
+    }
 
 
 

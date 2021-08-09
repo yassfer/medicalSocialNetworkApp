@@ -2,6 +2,7 @@ package com.health.talan.service;
 
 import com.health.talan.Repository.PieceJointRepo;
 import com.health.talan.entities.PieceJoint;
+import com.health.talan.entities.User;
 import com.health.talan.service.serviceInterfaces.PieceJointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,12 @@ public class PieceJointServiceImpl implements PieceJointService {
         PieceJoint pieceJoint1 = new PieceJoint(PieceJointName, pieceJoint.getContentType(), pieceJoint.getBytes(), pieceJoint.getSize());
 
         return pieceJointRepo.save(pieceJoint1);
+    }
+
+    @Override
+    public PieceJoint SaveFile(PieceJoint file){
+
+        return pieceJointRepo.save(file);
     }
 
 

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/comment")
+@RequestMapping("api/comment")
 public class CommentController {
 
     private final CommentServiceImpl commentServiceImpl;
@@ -56,20 +56,22 @@ public class CommentController {
     }
 
 
-    @PostMapping
-    public ResponseEntity<Comment> addComment(@RequestBody Comment comment) {
+    @PostMapping("user/{userId}/pub/{pubId}")
+    public ResponseEntity<Comment> addComment(@RequestBody Comment comment, @PathVariable("userId") Long userId, @PathVariable("pubId") Long pubId) {
 
-        Comment newComment = commentServiceImpl.saveComment(comment);
+        Comment newComment = commentServiceImpl.saveComment(comment, userId, pubId);
         return new ResponseEntity<>(newComment, HttpStatus.OK);
     }
 
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<?> updatePublication(@PathVariable("id") Long id, @RequestBody Comment comment) {
+    @PatchMapping("/{id}/user/{userId}/pub/{pubId}")
+    public ResponseEntity<?> updatePublication(@PathVariable("id") Long id, @PathVariable("userId") Long userId,
+                                               @PathVariable("pubId") Long pubId,@RequestBody Comment comment) {
+
 
         Optional<Comment> newComment = commentServiceImpl.getCommentById(id);
         if (newComment.isPresent()) {
-            commentServiceImpl.saveComment(comment);
+            commentServiceImpl.saveComment(comment, userId, pubId);
             return new ResponseEntity<>(newComment, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Comment doesn't exist", HttpStatus.BAD_REQUEST);

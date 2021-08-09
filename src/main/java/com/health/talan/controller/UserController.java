@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("users")
+@RequestMapping("api/users")
 public class UserController {
 
     private final UserServiceImpl userServiceImpl;

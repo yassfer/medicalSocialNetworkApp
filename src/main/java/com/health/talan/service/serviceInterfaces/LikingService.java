@@ -15,7 +15,7 @@ public interface LikingService {
 
     public String deleteLikeByUserAndPublication(Long userId, Long publicationId);
 
-    public Liking saveLike(Liking like);
+    public Liking saveLike(Liking like, Long userId);
 
     public String deleteLiking(Long id);
 }

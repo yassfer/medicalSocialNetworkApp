@@ -2,6 +2,8 @@ package com.health.talan.service;
 
 import com.health.talan.Repository.CommentRepo;
 import com.health.talan.entities.Comment;
+import com.health.talan.entities.Publication;
+import com.health.talan.entities.User;
 import com.health.talan.service.serviceInterfaces.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,11 +15,15 @@ import java.util.Optional;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepo commentRepo;
+    private final UserServiceImpl userServiceImpl;
+    private final PublicationServiceImpl publicationServiceImpl;
 
     @Autowired
-    public CommentServiceImpl(CommentRepo commentRepo){
+    public CommentServiceImpl(CommentRepo commentRepo, UserServiceImpl userServiceImpl, PublicationServiceImpl publicationServiceImpl){
 
         this.commentRepo = commentRepo;
+        this.userServiceImpl = userServiceImpl;
+        this.publicationServiceImpl = publicationServiceImpl;
     }
 
     @Override
@@ -52,10 +58,17 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment saveComment(Comment comment){
+    public Comment saveComment(Comment comment, Long userId, Long pubId){
+        Optional<User> user = userServiceImpl.getUserById(userId);
+        comment.setUser(user.get());
+
+        Optional<Publication> publication = publicationServiceImpl.getPublicationById(pubId);
+        comment.setPublication(publication.get());
+
         Comment newComment = commentRepo.save(comment);
         return newComment;
     }
+
 
     @Override
     public String deleteComment(Long id){

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/like")
+@RequestMapping("api/like")
 public class LikingController {
 
         private final LikingServiceImpl likingServiceImpl;
@@ -55,10 +55,10 @@ public class LikingController {
             }
         }
 
-        @PostMapping
-        public ResponseEntity<Liking> addLike(@RequestBody Liking like) {
+        @PostMapping("/{userId}")
+        public ResponseEntity<Liking> addLike(@RequestBody Liking like, @PathVariable("userId")Long userId) {
 
-            Liking newLike = likingServiceImpl.saveLike(like);
+            Liking newLike = likingServiceImpl.saveLike(like, userId);
             return new ResponseEntity<>(newLike, HttpStatus.OK);
         }
 

@@ -1,5 +1,7 @@
 package com.health.talan.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -29,54 +31,47 @@ public class PublicationChallenge implements Serializable {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "dateCreation")
-	private Date dateCreation;
+	private Date dateCreation = new Date();
 
 
 	@Column(name = "content")
 	private String content;
 
 
-	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "publicationChallenge")
+	@JsonIgnoreProperties(value = {"publicationChallenge", "handler","hibernateLazyInitializer"}, allowSetters = true)
+	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "publicationChallenge")
 	@Column(name = "pieceJoint")
 	private Set<PieceJoint> pieceJoints = new HashSet<>();
 
 
-	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "publicationChallenge")
+	@JsonIgnoreProperties(value = {"publicationChallenge", "handler","hibernateLazyInitializer"}, allowSetters = true)
+	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "publicationChallenge")
 	private Set<Liking> likes = new HashSet<>();
 
 
-	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "publicationChallenge")
-	private Set<Comment> comments;
+
+	private boolean approuved = false;
 
 
-
-	@ManyToOne
-	@JoinColumn(name = "idUser", referencedColumnName = "id", insertable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "idUser")
 	private User user;
 
 
-	@ManyToOne
-	@JoinColumn(name = "idChallenge", referencedColumnName = "id", insertable = false, updatable = false)
+	@JsonIgnoreProperties(value = {"publicationChallenge", "handler","hibernateLazyInitializer"}, allowSetters = true)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "challengeId")
 	private Challenge challenge;
 
-
-	private boolean approuved = false;
 
 
 	public PublicationChallenge() {
 		super();
 	}
 
-	public PublicationChallenge(String content, Set<PieceJoint> pieceJoints, Set<Liking> likes,
-								Set<Comment> comments, User user, Challenge challenge, boolean approuved) {
+	public PublicationChallenge(String content) {
 
 		this.content = content;
-		this.pieceJoints = pieceJoints;
-		this.likes = likes;
-		this.comments = comments;
-		this.user = user;
-		this.challenge = challenge;
-		this.approuved = approuved;
 	}
 
 

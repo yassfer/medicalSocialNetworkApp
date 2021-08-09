@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,24 +27,23 @@ public class Liking implements Serializable {
 	@Column(name = "id")
 	private Long id;
 
-
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "date")
-	private Date date;
+	private Date date = new Date();
 
 
-	@JsonIgnore
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "publication")
 	private Publication publication;
 
 
 	@JsonIgnore
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "publicationChallenge")
 	private PublicationChallenge publicationChallenge;
 
 
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user")
 	private User user;
@@ -54,9 +54,7 @@ public class Liking implements Serializable {
 	}
 
 
-	public Liking(Date date, Publication publication, User user) {
-		this.date = date;
+	public Liking(Publication publication) {
 		this.publication = publication;
-		this.user = user;
 	}
 }

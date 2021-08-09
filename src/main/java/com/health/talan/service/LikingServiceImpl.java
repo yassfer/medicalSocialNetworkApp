@@ -2,6 +2,7 @@ package com.health.talan.service;
 
 import com.health.talan.Repository.LikingRepo;
 import com.health.talan.entities.Liking;
+import com.health.talan.entities.User;
 import com.health.talan.service.serviceInterfaces.LikingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,11 +14,13 @@ import java.util.Optional;
 public class LikingServiceImpl implements LikingService {
 
         private final LikingRepo likingRepo;
+        private final UserServiceImpl userServiceImpl;
 
         @Autowired
-        public LikingServiceImpl(LikingRepo likingRepo){
+        public LikingServiceImpl(LikingRepo likingRepo, UserServiceImpl userServiceImpl){
 
             this.likingRepo = likingRepo;
+            this.userServiceImpl = userServiceImpl;
         }
 
         @Override
@@ -52,7 +55,9 @@ public class LikingServiceImpl implements LikingService {
         }
 
         @Override
-        public Liking saveLike(Liking like){
+        public Liking saveLike(Liking like, Long userId){
+            Optional<User> user = userServiceImpl.getUserById(userId);
+            like.setUser(user.get());
             Liking newLike = likingRepo.save(like);
             return newLike;
         }

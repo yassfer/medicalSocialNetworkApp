@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/publication")
+@RequestMapping("api/publication")
 public class PublicationController {
 
     private final PublicationServiceImpl publicationServiceImpl;
@@ -51,20 +51,20 @@ public class PublicationController {
         return new ResponseEntity<>("that user have no publications", HttpStatus.OK);
     }
 
-    @PostMapping()
-    public ResponseEntity<Publication> publishPublication(@RequestBody Publication publication) {
+    @PostMapping("/{userId}")
+    public ResponseEntity<Publication> publishPublication(@RequestBody Publication publication, @PathVariable("userId") Long userId) {
 
-        Publication newPublication = publicationServiceImpl.publishPublication(publication);
+        Publication newPublication = publicationServiceImpl.publishPublication(publication, userId);
         return new ResponseEntity<>(newPublication, HttpStatus.OK);
     }
 
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<?> updatePublication(@PathVariable("id") Long id, @RequestBody Publication publication) {
+    @PatchMapping("/{id}/user/{userId}")
+    public ResponseEntity<?> updatePublication(@PathVariable("id") Long id, @PathVariable("userId") Long userId, @RequestBody Publication publication) {
 
         Optional<Publication> pub = publicationServiceImpl.getPublicationById(id);
         if (pub.isPresent()) {
-            publicationServiceImpl.publishPublication(publication);
+            publicationServiceImpl.publishPublication(publication, userId);
             return new ResponseEntity<>(pub, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Publication doesn't exist", HttpStatus.BAD_REQUEST);

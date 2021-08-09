@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -29,24 +30,28 @@ public class Publication implements Serializable {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "dateCreation")
-	private Date dateCreation;
+	private Date dateCreation = new Date();
 
 
 	@Column(name = "content")
 	private String content;
 
 
-	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "publication")
+	@OneToMany(mappedBy = "publication", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@Column(name = "pieceJoint")
 	private Set<PieceJoint> pieceJoints = new HashSet<>();
 
 
-	@OneToMany(mappedBy = "publication", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+	@JsonIgnoreProperties(value = {"publication", "handler","hibernateLazyInitializer"}, allowSetters = true)
+	@OneToMany(mappedBy = "publication", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Liking> likes = new HashSet<>();
 
 
-	@OneToMany(mappedBy = "publication", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-	private Set<Comment> comments;
+
+	@JsonIgnoreProperties(value = {"publication", "handler","hibernateLazyInitializer"}, allowSetters = true)
+	@OneToMany(mappedBy = "publication", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Comment> comments = new HashSet<>();
+
 
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -54,33 +59,14 @@ public class Publication implements Serializable {
 	private User user;
 
 
-	public void addLike(Liking like) {
-
-		likes.add(like);
-		like.setPublication(this);
-
-	}
-
-	public void addComment(Comment comment) {
-
-		comments.add(comment);
-		comment.setPublication(this);
-
-	}
-
 	public Publication() {
 		super();
 	}
 
 
-	public Publication(Date dateCreation, String content, Set<PieceJoint> pieceJoints,
-					   Set<Liking> likes, Set<Comment> comments, User user) {
-		this.dateCreation = dateCreation;
+	public Publication(String content, Set<PieceJoint> pieceJoints) {
 		this.content = content;
 		this.pieceJoints = pieceJoints;
-		this.likes = likes;
-		this.comments = comments;
-		this.user = user;
 	}
 
 }

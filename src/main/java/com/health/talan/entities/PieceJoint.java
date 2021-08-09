@@ -37,12 +37,13 @@ public class PieceJoint implements Serializable {
     @Lob
     private byte[] data;
 
-    // @JsonIgnore
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "publication_pieceJoint")
     private Publication publication;
 
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "publicationChallenge_pieceJoint")
     private PublicationChallenge publicationChallenge;
@@ -60,44 +61,5 @@ public class PieceJoint implements Serializable {
     }
 
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-
-    public Long getSize() {
-        return size;
-    }
-
-    public void setSize(Long size) {
-        this.size = size;
-    }
-
-    public byte[] getData() {
-        return data;
-    }
-
-    public void setData(byte[] data) {
-        this.data = data;
-    }
 
 }

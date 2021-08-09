@@ -11,8 +11,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class PieceJointUploadExceptionAdvice extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    /*@ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<ResponseMessage> handleMaxSizeException(MaxUploadSizeExceededException exc) {
         return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage("PieceJoint too large!"));
+    }*/
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ResponseMessage> handleMaxSizeException(MaxUploadSizeExceededException exc) {
+        return ResponseEntity
+                .status(HttpStatus.EXPECTATION_FAILED)
+                .body(new ResponseMessage("One or more files are too large!"));
     }
 }

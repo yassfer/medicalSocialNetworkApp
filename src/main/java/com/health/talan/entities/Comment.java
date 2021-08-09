@@ -35,14 +35,12 @@ public class Comment implements Serializable {
 	private Date date;
 
 
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_publication")
 	private Publication publication;
 
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_publicationChallenge")
-	private PublicationChallenge publicationChallenge;
 
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -54,10 +52,8 @@ public class Comment implements Serializable {
 	}
 
 
-	public Comment(String content, Date date, Publication publication, User user) {
+	public Comment(String content, Publication publication) {
 		this.content = content;
-		this.date = date;
 		this.publication = publication;
-		this.user = user;
 	}
 }

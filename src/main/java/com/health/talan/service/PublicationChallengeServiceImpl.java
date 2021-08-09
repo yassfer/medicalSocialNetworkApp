@@ -1,7 +1,9 @@
 package com.health.talan.service;
 
 import com.health.talan.Repository.PublicationChallengeRepo;
+import com.health.talan.entities.Challenge;
 import com.health.talan.entities.PublicationChallenge;
+import com.health.talan.entities.User;
 import com.health.talan.service.serviceInterfaces.PublicationChallengeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,12 +16,14 @@ import java.util.Optional;
 public class PublicationChallengeServiceImpl implements PublicationChallengeService {
 
     private final PublicationChallengeRepo publicationChallengeRepo;
+    private final ChallengeServiceImpl challengeServiceImpl;
     private final UserServiceImpl userServiceImpl;
 
     @Autowired
-    public PublicationChallengeServiceImpl(PublicationChallengeRepo publicationChallengeRepo, UserServiceImpl userServiceImpl){
+    public PublicationChallengeServiceImpl(ChallengeServiceImpl challengeServiceImpl, PublicationChallengeRepo publicationChallengeRepo, UserServiceImpl userServiceImpl){
 
         this.publicationChallengeRepo = publicationChallengeRepo;
+        this.challengeServiceImpl = challengeServiceImpl;
         this.userServiceImpl = userServiceImpl;
     }
 
@@ -60,12 +64,20 @@ public class PublicationChallengeServiceImpl implements PublicationChallengeServ
 
 
     @Override
-    public PublicationChallenge addPublicationChallenge(PublicationChallenge publicationChallenge){
+    public PublicationChallenge addPublicationChallenge(PublicationChallenge publicationChallenge, Long challengeId, Long userId){
+
+            Optional<Challenge> challenge = challengeServiceImpl.getChallengeById(challengeId);
+            Optional<User> user = userServiceImpl.getUserById(userId);
+
+            publicationChallenge.setChallenge(challenge.get());
+            publicationChallenge.setUser(user.get());
 
             PublicationChallenge newPublicationChallenge = publicationChallengeRepo.save(publicationChallenge);
 
             return newPublicationChallenge;
+
         }
+
 
 
     @Override

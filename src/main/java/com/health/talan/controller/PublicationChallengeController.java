@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/publicationChallenge")
+@RequestMapping("api/publicationChallenge")
 public class PublicationChallengeController {
 
     private final PublicationChallengeServiceImpl publicationChallengeServiceImpl;
@@ -75,21 +75,28 @@ public class PublicationChallengeController {
 
 
 
-    @PostMapping()
-    public ResponseEntity<PublicationChallenge> AddPublicationChallenge(@RequestBody PublicationChallenge publicationChallenge) {
+    @PostMapping("/{challengeId}/{userId}")
+    public ResponseEntity<PublicationChallenge> AddPublicationChallenge(@RequestBody PublicationChallenge publicationChallenge, @PathVariable("userId") Long userId, @PathVariable("challengeId") Long challengeId) {
 
-        PublicationChallenge newPublicationChallenge = publicationChallengeServiceImpl.addPublicationChallenge(publicationChallenge);
+        PublicationChallenge newPublicationChallenge = publicationChallengeServiceImpl.addPublicationChallenge(publicationChallenge,challengeId,userId);
         return new ResponseEntity<>(newPublicationChallenge, HttpStatus.OK);
     }
 
 
-    @GetMapping("/approuve/{challengePublicationId}")
-    public ResponseEntity<?> approuvePublicationChallenge(@PathVariable("challengePublicationId") Long id) {
+    @GetMapping("/approuve/{challengePublicationId}/{userId}")
+    public ResponseEntity<?> approuvePublicationChallenge(@PathVariable("challengePublicationId") Long challengePublicationId, @PathVariable("userId") Long userId) {
 
-        Optional<PublicationChallenge> pub = publicationChallengeServiceImpl.getPublicationChallengeById(id);
+        Optional<PublicationChallenge> pub = publicationChallengeServiceImpl.getPublicationChallengeById(challengePublicationId);
+
         if (pub.isPresent()) {
-            pub.get().setApprouved(true);
-            return new ResponseEntity<>(pub, HttpStatus.OK);
+            if(userId.equals(pub.get().getUser())){
+                return new ResponseEntity<>("Only the owner of the challenge can approuve", HttpStatus.OK);
+            } else {
+                pub.get().setApprouved(true);
+                publicationChallengeServiceImpl.updatePublicationChallenge(pub.get());
+                return new ResponseEntity<>(pub, HttpStatus.OK);
+            }
+
         } else {
             return new ResponseEntity<>("Challenge publication doesn't exist", HttpStatus.BAD_REQUEST);
         }
@@ -98,12 +105,14 @@ public class PublicationChallengeController {
 
 
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<?> updatePublicationChallenge(@PathVariable("id") Long id, @RequestBody PublicationChallenge publicationChallenge) {
+    @PatchMapping("/{id}/user/{userId}/challenge/{challengeId}")
+    public ResponseEntity<?> updatePublicationChallenge(@PathVariable("id") Long id, @PathVariable("userId") Long userId,
+                                                        @PathVariable("challengeId") Long challengeId, @RequestBody PublicationChallenge publicationChallenge) {
+
 
         Optional<PublicationChallenge> pub = publicationChallengeServiceImpl.getPublicationChallengeById(id);
         if (pub.isPresent()) {
-            publicationChallengeServiceImpl.updatePublicationChallenge(publicationChallenge);
+            publicationChallengeServiceImpl.addPublicationChallenge(publicationChallenge, challengeId, userId);
             return new ResponseEntity<>(pub, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Challenge doesn't exist", HttpStatus.BAD_REQUEST);

@@ -17,7 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
 @Table(name = "challenge")
@@ -29,19 +30,40 @@ public class Challenge implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
+
+
 	@Column(name = "nom")
 	private String nom;
+
+
 	@Column(name = "objectif")
 	private String objectif;
+
+
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "publicationChallenge")
 	@Column(name = "pieceJoint")
 	private Set<PieceJoint> pieceJoints = new HashSet<>();
-	@ManyToOne
+
+
+
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_adminChallenge")
 	private User adminChallenge;
-	@JsonIgnore
-	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "challenge", fetch = FetchType.EAGER)
-	private Set<PublicationChallenge> PublicationChallenge;
+
+
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "challenge", fetch = FetchType.EAGER)
+	private Set<PublicationChallenge> PublicationChallenge = new HashSet<>();
+
+
+
+	public Challenge(String nom, String objectif) {
+
+		this.nom = nom;
+		this.objectif = objectif;
+	}
+
+
 
 	public Challenge() {
 		super();
@@ -87,18 +109,18 @@ public class Challenge implements Serializable {
 		this.adminChallenge = adminChallenge;
 	}
 
-	public Set<PublicationChallenge> getPublicationChallange() {
+	public Set<PublicationChallenge> getPublicationChallenge() {
 		return PublicationChallenge;
 	}
 
-	public void setPublicationChallange(Set<PublicationChallenge> publicationChallange) {
-		PublicationChallenge = publicationChallange;
+	public void setPublicationChallenge(Set<PublicationChallenge> publicationChallenge) {
+		PublicationChallenge = publicationChallenge;
 	}
 
 	@Override
 	public String toString() {
 		return "Challenge [id=" + id + ", nom=" + nom + ", objectif=" + objectif + ", pieceJoint="
-				+ Arrays.toString(new Set[]{pieceJoints}) + ", adminChallenge=" + adminChallenge + ", PublicationChallange="
+				+ Arrays.toString(new Set[]{pieceJoints}) + ", adminChallenge=" + adminChallenge + ", PublicationChallenge="
 				+ PublicationChallenge + "]";
 	}
 

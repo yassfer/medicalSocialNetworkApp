@@ -17,7 +17,7 @@ public interface PublicationChallengeService {
 
     public Optional<List<PublicationChallenge>> getPublicationChallengeByChallengeId(Long challengeId);
 
-    public PublicationChallenge addPublicationChallenge(PublicationChallenge publicationChallenge);
+    public PublicationChallenge addPublicationChallenge(PublicationChallenge publicationChallenge, Long challengeId, Long userId);
 
     public Optional<PublicationChallenge> getPublicationChallengeByChallengeAndUser(Long userId, Long challengeId);
 

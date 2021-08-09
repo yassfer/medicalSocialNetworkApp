@@ -15,7 +15,7 @@ public interface CommentService {
 
     public String deleteLikeByUserAndPublication(Long userId, Long publicationId);
 
-    public Comment saveComment(Comment comment);
+    public Comment saveComment(Comment comment, Long userId, Long pubId);
 
     public String deleteComment(Long id);
 }

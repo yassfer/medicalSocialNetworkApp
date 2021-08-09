@@ -13,7 +13,9 @@ public interface PublicationService {
 
     public Optional<List<Publication>> getPublicationByUserId(Long userId);
 
-    public Publication publishPublication(Publication publication);
+    public Publication publishPublication(Publication publication, Long userId);
+
+    public Publication updatePublication(Publication publication);
 
     public String deletePublication(Long id);
 }

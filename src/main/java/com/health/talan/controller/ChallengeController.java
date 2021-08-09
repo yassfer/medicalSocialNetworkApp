@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("challenge")
+@RequestMapping("api/challenge")
 public class ChallengeController {
 
     private final ChallengeServiceImpl challengeServiceImpl;

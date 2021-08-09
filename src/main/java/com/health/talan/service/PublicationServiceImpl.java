@@ -45,10 +45,20 @@ public class PublicationServiceImpl implements PublicationService {
 
 
     @Override
-    public Publication publishPublication(Publication publication){
+    public Publication publishPublication(Publication publication, Long userId){
+
+        Optional<User> user = userServiceImpl.getUserById(userId);
+        publication.setUser(user.get());
+
         Publication newPublication = publicationRepo.save(publication);
-        Optional<User> user = userServiceImpl.getUserById(publication.getUser().getId());
-        newPublication.setUser(user.get());
+
+        return newPublication;
+    }
+
+
+    @Override
+    public Publication updatePublication(Publication publication) {
+        Publication newPublication = publicationRepo.save(publication);
 
         return newPublication;
     }

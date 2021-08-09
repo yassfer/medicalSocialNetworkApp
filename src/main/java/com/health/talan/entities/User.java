@@ -19,7 +19,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.health.talan.entities.Role;
 import lombok.*;
 
 
@@ -68,7 +67,7 @@ public class User implements Serializable {
 
 
 	@Column(name = "image")
-	private byte[] image;
+	private PieceJoint image;
 
 
 	@Column(name = "profession")
@@ -79,105 +78,89 @@ public class User implements Serializable {
 	private boolean professionnalisme;
 
 
+	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 
+	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
-	private Set<Interest> interests;
+	private Set<Interest> interests = new HashSet<>();
 
 
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
-	private Set<PieceJustif> pieceJustifs;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private Set<PieceJustif> pieceJustifs = new HashSet<>();
 
 
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
-	private Set<Amis> amis;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private Set<Amis> amis = new HashSet<>();
 
 
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "adminCom", fetch = FetchType.EAGER)
-	private Set<Community> myCommunities;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "adminCom")
+	private Set<Community> myCommunities = new HashSet<>();
 
 
+	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
-	private Set<Community> communitiesParticipate;
+	private Set<Community> communitiesParticipate = new HashSet<>();
 
 
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
-	private Set<Entreprise> entreprises;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private Set<Entreprise> entreprises = new HashSet<>();
 
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
-	private Set<Participant> participants;
+	private Set<Participant> participants = new HashSet<>();
 
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "adminEvent")
-	private Set<Event> events;
+	private Set<Event> events = new HashSet<>();
 
 
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "sender", fetch = FetchType.EAGER)
-	private Set<Invitation> invitationsSend;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "sender")
+	private Set<Invitation> invitationsSend = new HashSet<>();
 
 
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "receiver", fetch = FetchType.EAGER)
-	private Set<Invitation> invitationsReceive;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "receiver")
+	private Set<Invitation> invitationsReceive = new HashSet<>();
 
 
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
-	private Set<Publicity> publicities;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private Set<Publicity> publicities = new HashSet<>();
 
 
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
-	private List<Publication> publications;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private List<Publication> publications = new ArrayList<>();
 
 
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "adminChallenge", fetch = FetchType.EAGER)
-	private Set<Challenge> myChallenge;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "adminChallenge")
+	private Set<Challenge> myChallenge = new HashSet<>();
 
 
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
-	private Set<PublicationChallenge> publicationChallenges;
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+	private Set<PublicationChallenge> publicationChallenges = new HashSet<>();
 
 
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+	@JsonIgnore
+	@OneToMany(mappedBy = "user")
 	private Set<Liking> likes = new HashSet<>();
 
 
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+	@JsonIgnore
+	@OneToMany(mappedBy = "user")
 	private Set<Comment> comments = new HashSet<>();
-
-
-	public void addPublication(Publication publication) {
-
-		publications.add(publication);
-		publication.setUser(this);
-
-	}
-
-	public void addLike(Liking like) {
-
-		likes.add(like);
-		like.setUser(this);
-
-	}
-
-	public void addComment(Comment comment) {
-
-		comments.add(comment);
-		comment.setUser(this);
-
-	}
-
 
 
 	public User() {
@@ -186,13 +169,7 @@ public class User implements Serializable {
 
 
 	public User(String firstName, String lastName, String mail, String username, String password,
-				Date birthDate, String address, byte[] image, String profession, boolean professionnalisme,
-				Set<Role> roles, Set<Interest> interests, Set<PieceJustif> pieceJustifs, Set<Amis> amis,
-				Set<Community> myCommunities, Set<Community> communitiesParticipate, Set<Entreprise> entreprises,
-				Set<Participant> participants, Set<Event> events, Set<Invitation> invitationsSend,
-				Set<Invitation> invitationsReceive, Set<Publicity> publicities, List<Publication> publications,
-				Set<Challenge> myChallenge, Set<PublicationChallenge> publicationChallenge, Set<Liking> likes,
-				Set<Comment> comments) {
+				Date birthDate, String address, PieceJoint image, String profession, boolean professionnalisme) {
 
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -204,23 +181,6 @@ public class User implements Serializable {
 		this.image = image;
 		this.profession = profession;
 		this.professionnalisme = professionnalisme;
-		this.roles = roles;
-		this.interests = interests;
-		this.pieceJustifs = pieceJustifs;
-		this.amis = amis;
-		this.myCommunities = myCommunities;
-		this.communitiesParticipate = communitiesParticipate;
-		this.entreprises = entreprises;
-		this.participants = participants;
-		this.events = events;
-		this.invitationsSend = invitationsSend;
-		this.invitationsReceive = invitationsReceive;
-		this.publicities = publicities;
-		this.publications = publications;
-		this.myChallenge = myChallenge;
-		this.publicationChallenges = publicationChallenge;
-		this.likes = likes;
-		this.comments = comments;
 	}
 }
 
