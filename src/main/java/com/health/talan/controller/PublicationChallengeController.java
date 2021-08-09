@@ -134,6 +134,18 @@ public class PublicationChallengeController {
     }
 
 
+    @DeleteMapping("/challenge/{challengeId}")
+    public ResponseEntity<?> deleteChallengePublicationsByChallengeId(@PathVariable("challengeId") Long challengeId) {
+
+        String message = publicationChallengeServiceImpl.deleteChallengePublicationsByChallengeId(challengeId);
+        if (message.equals("Challenge Publication Deleted")) {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 
 
     @DeleteMapping("/user/{userId}/challenge/{challengeId}")

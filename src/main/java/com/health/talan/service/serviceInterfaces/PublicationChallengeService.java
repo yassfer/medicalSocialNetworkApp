@@ -25,6 +25,8 @@ public interface PublicationChallengeService {
 
     public String deleteChallengePublicationsByUserId(Long userId);
 
+    public String deleteChallengePublicationsByChallengeId(Long challengeId);
+
     public String deletePublicationChallengeByChallengeAndUser(Long userId, Long challengeId);
 
     public String deletePublicationChallenge(Long id);

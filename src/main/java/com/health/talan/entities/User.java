@@ -149,7 +149,7 @@ public class User implements Serializable {
 
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<PublicationChallenge> publicationChallenges = new HashSet<>();
 
 

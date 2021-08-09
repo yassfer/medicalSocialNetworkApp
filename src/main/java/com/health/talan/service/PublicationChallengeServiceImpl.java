@@ -117,6 +117,26 @@ public class PublicationChallengeServiceImpl implements PublicationChallengeServ
     }
 
 
+
+    @Override
+    public String deleteChallengePublicationsByChallengeId(Long challengeId){
+
+        Optional<List<PublicationChallenge>> publicationChallenges = getPublicationChallengeByChallengeId(challengeId);
+        if(publicationChallenges.isPresent()){
+
+            for(PublicationChallenge pub : publicationChallenges.get()){
+
+                publicationChallengeRepo.deleteById(pub.getId());
+            }
+
+            return "Challenge Publication Deleted";
+        }
+        else {
+            return "Challenge Publication doesn't exit";
+        }
+    }
+
+
     @Override
     public String deletePublicationChallengeByChallengeAndUser(Long userId, Long challengeId){
 

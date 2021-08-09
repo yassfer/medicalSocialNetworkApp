@@ -33,11 +33,6 @@ public class PieceJointServiceImpl implements PieceJointService {
         return pieceJointRepo.save(pieceJoint1);
     }
 
-    @Override
-    public PieceJoint SaveFile(PieceJoint file){
-
-        return pieceJointRepo.save(file);
-    }
 
 
     @Override

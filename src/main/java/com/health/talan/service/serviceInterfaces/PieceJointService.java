@@ -15,6 +15,5 @@ public interface PieceJointService {
 
     public Stream<PieceJoint> getAllPieceJoints();
 
-    public PieceJoint SaveFile(PieceJoint file);
 
 }
