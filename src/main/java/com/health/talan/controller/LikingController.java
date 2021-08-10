@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+
+@CrossOrigin(origins = "http://localhost:4200")
 @Controller
 @RequestMapping("api/like")
 public class LikingController {
@@ -78,7 +80,7 @@ public class LikingController {
         public ResponseEntity<?> deleteLike(@PathVariable("id") Long id) {
 
             String message = likingServiceImpl.deleteLiking(id);
-            if (message.equals("Deleted")) {
+            if (message.equals("like Deleted")) {
                 return new ResponseEntity<>(message, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(message, HttpStatus.CONFLICT);

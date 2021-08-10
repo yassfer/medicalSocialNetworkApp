@@ -37,19 +37,19 @@ public class Publication implements Serializable {
 	private String content;
 
 
-	@OneToMany(mappedBy = "publication", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "publication", fetch = FetchType.EAGER)
 	@Column(name = "pieceJoint")
 	private Set<PieceJoint> pieceJoints = new HashSet<>();
 
 
 	@JsonIgnoreProperties(value = {"publication", "handler","hibernateLazyInitializer"}, allowSetters = true)
-	@OneToMany(mappedBy = "publication", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "publication", fetch = FetchType.EAGER)
 	private Set<Liking> likes = new HashSet<>();
 
 
 
 	@JsonIgnoreProperties(value = {"publication", "handler","hibernateLazyInitializer"}, allowSetters = true)
-	@OneToMany(mappedBy = "publication", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "publication", fetch = FetchType.EAGER)
 	private Set<Comment> comments = new HashSet<>();
 
 

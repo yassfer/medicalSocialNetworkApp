@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+
+@CrossOrigin(origins = "http://localhost:4200")
 @Controller
 @RequestMapping("api/comment")
 public class CommentController {
@@ -39,7 +41,7 @@ public class CommentController {
             return new ResponseEntity<>(comment, HttpStatus.OK);
         }
         else{
-            return new ResponseEntity<>("There's no comment with those userId and publicationId", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("There's no comment with that id", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -96,7 +98,7 @@ public class CommentController {
     public ResponseEntity<?> deleteComment(@PathVariable("id") Long id) {
 
         String message = commentServiceImpl.deleteComment(id);
-        if (message.equals("Deleted")) {
+        if (message.equals("Comment Deleted")) {
             return new ResponseEntity<>(message, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(message, HttpStatus.CONFLICT);

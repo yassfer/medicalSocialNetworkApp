@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
+@CrossOrigin(origins = "http://localhost:4200")
 @Controller
 @RequestMapping("api/pieceJoint")
 public class PieceJointController {

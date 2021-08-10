@@ -44,7 +44,7 @@ public class PieceJoint implements Serializable {
 
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "publicationChallenge_pieceJoint")
     private PublicationChallenge publicationChallenge;
 

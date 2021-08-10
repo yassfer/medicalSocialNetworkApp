@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+
+@CrossOrigin(origins = "http://localhost:4200")
 @Controller
 @RequestMapping("api/publication")
 public class PublicationController {
@@ -33,12 +35,13 @@ public class PublicationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Publication>> getPublicationById(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getPublicationById(@PathVariable("id") Long id) {
         Optional<Publication> publication = publicationServiceImpl.getPublicationById(id);
         if (publication.isPresent()) {
             return new ResponseEntity<>(publication, HttpStatus.OK);
         }
-        throw new IllegalStateException("publication not found");
+
+        return new ResponseEntity<>("publication not found", HttpStatus.OK);
     }
 
     @GetMapping("/user/{userId}")
@@ -76,7 +79,7 @@ public class PublicationController {
     public ResponseEntity<?> deletePublication(@PathVariable("id") Long id) {
 
         String message = publicationServiceImpl.deletePublication(id);
-        if (message.equals("Deleted")) {
+        if (message.equals("Publication Deleted")) {
             return new ResponseEntity<>(message, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);

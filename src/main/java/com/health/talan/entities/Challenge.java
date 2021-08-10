@@ -52,7 +52,7 @@ public class Challenge implements Serializable {
 
 
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "challenge", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "challenge", fetch = FetchType.EAGER)
 	private Set<PublicationChallenge> PublicationChallenge = new HashSet<>();
 
 

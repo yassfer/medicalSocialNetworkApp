@@ -36,7 +36,7 @@ public class Comment implements Serializable {
 
 
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
 	@JoinColumn(name = "id_publication")
 	private Publication publication;
 

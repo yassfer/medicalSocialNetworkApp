@@ -33,13 +33,13 @@ public class Liking implements Serializable {
 
 
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
 	@JoinColumn(name = "publication")
 	private Publication publication;
 
 
 	@JsonIgnore
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
 	@JoinColumn(name = "publicationChallenge")
 	private PublicationChallenge publicationChallenge;
 

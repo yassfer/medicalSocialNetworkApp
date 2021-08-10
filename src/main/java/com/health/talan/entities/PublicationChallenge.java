@@ -59,7 +59,7 @@ public class PublicationChallenge implements Serializable {
 
 
 	@JsonIgnoreProperties(value = {"publicationChallenge", "handler","hibernateLazyInitializer"}, allowSetters = true)
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
 	@JoinColumn(name = "challengeId")
 	private Challenge challenge;
 
