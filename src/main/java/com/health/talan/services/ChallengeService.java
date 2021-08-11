@@ -17,13 +17,16 @@ import com.health.talan.repositories.ChallangeRepository;
 import com.health.talan.repositories.UserRepository;
 
 @Service
-public class ChallangeService implements IChallangeService {
+public class ChallengeService implements IChallangeService {
 
-	@Autowired
-	ChallangeRepository challangeRepository;
-
-	@Autowired
+	ChallangeRepository challangeRepository;	
 	UserRepository userRepository;
+
+	@Autowired
+	public ChallengeService(ChallangeRepository challangeRepository, UserRepository userRepository) {
+		this.challangeRepository = challangeRepository;
+		this.userRepository = userRepository;
+	}
 
 	@Override
 	public Long addChallenge(Long id, Challenge challange) {

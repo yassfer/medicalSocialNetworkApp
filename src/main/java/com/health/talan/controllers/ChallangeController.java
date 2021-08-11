@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.health.talan.entities.Challenge;
 import com.health.talan.repositories.ChallangeRepository;
 import com.health.talan.repositories.UserRepository;
-import com.health.talan.services.ChallangeService;
+import com.health.talan.services.ChallengeService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -28,7 +28,7 @@ import com.health.talan.services.ChallangeService;
 public class ChallangeController {
 
 	@Autowired
-	ChallangeService challangeService;
+	ChallengeService challangeService;
 	@Autowired
 	ChallangeRepository challangeRepository;
 	@Autowired

@@ -59,7 +59,7 @@ public class User implements Serializable {
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
-
+	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<Interest> interests;
 	@JsonIgnore
@@ -71,13 +71,16 @@ public class User implements Serializable {
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "adminCom", fetch = FetchType.EAGER)
 	private Set<Community> myCommunities;
+	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<Community> communitiesParticipate;
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Entreprise> entreprises;
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private Set<Participant> participants;
+	@JsonIgnore
 	@OneToMany(mappedBy = "adminEvent")
 	private Set<Event> events;
 	@JsonIgnore
@@ -92,6 +95,7 @@ public class User implements Serializable {
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Publication> publications;
+	
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "adminChallenge", fetch = FetchType.EAGER)
 	private Set<Challenge> myChallenge;

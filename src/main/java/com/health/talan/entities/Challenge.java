@@ -2,6 +2,7 @@ package com.health.talan.entities;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -39,10 +40,10 @@ public class Challenge implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "id_adminChallenge")
 	private User adminChallenge;
-	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "challenge", fetch = FetchType.EAGER)
-	private Set<PublicationChallenge> PublicationChallange;
-
+	//@JsonIgnore
+	@OneToMany(mappedBy = "challenge", fetch = FetchType.EAGER)
+	private Set<PublicationChallenge> PublicationChallenge = new HashSet<>();
+	
 	public Challenge() {
 		super();
 	}
@@ -87,19 +88,22 @@ public class Challenge implements Serializable {
 		this.adminChallenge = adminChallenge;
 	}
 
-	public Set<PublicationChallenge> getPublicationChallange() {
-		return PublicationChallange;
+	public Set<PublicationChallenge> getPublicationChallenge() {
+		return PublicationChallenge;
 	}
 
-	public void setPublicationChallange(Set<PublicationChallenge> publicationChallange) {
-		PublicationChallange = publicationChallange;
+	public void setPublicationChallenge(Set<PublicationChallenge> publicationChallenge) {
+		PublicationChallenge = publicationChallenge;
 	}
 
 	@Override
 	public String toString() {
 		return "Challenge [id=" + id + ", nom=" + nom + ", objectif=" + objectif + ", pieceJoint="
-				+ Arrays.toString(pieceJoint) + ", adminChallenge=" + adminChallenge + ", PublicationChallange="
-				+ PublicationChallange + "]";
+				+ Arrays.toString(pieceJoint) + ", adminChallenge=" + adminChallenge + ", PublicationChallenge="
+				+ PublicationChallenge + "]";
 	}
+
+
+
 
 }
