@@ -1,7 +1,5 @@
 package com.health.talan.controller;
 
-import com.health.talan.Response.ResponseMessage;
-import com.health.talan.Response.ResponsePieceJoint;
 import com.health.talan.entities.PieceJoint;
 import com.health.talan.service.PieceJointServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,65 +35,83 @@ public class PieceJointController {
 
 
 
-    @PostMapping("/upload")
-    public ResponseEntity<ResponseMessage> uploadPieceJoint(@RequestParam("pieceJoint") MultipartFile pieceJoint) {
-        String message = "";
-        try {
-            pieceJointServiceImpl.store(pieceJoint);
+    @PostMapping("/upload/publication/{publicationId}")
+    public ResponseEntity<?> uploadPieceJoint(@RequestParam("pieceJoint") MultipartFile pieceJoint, @PathVariable("publicationId")Long publicationId) {
 
-            message = "Uploaded the pieceJoint successfully: " + pieceJoint.getOriginalFilename();
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+        try {
+            PieceJoint pieceJoint1 = pieceJointServiceImpl.store(pieceJoint, publicationId);
+            String pieceJointDownloadUri = ServletUriComponentsBuilder
+                    .fromCurrentContextPath()
+                    .path("/api/pieceJoint/")
+                    .path(pieceJoint1.getId().toString())
+                    .toUriString();
+            pieceJoint1.setUrl(pieceJointDownloadUri);
+
+            pieceJointServiceImpl.updatePieceJoint(pieceJoint1);
+            return ResponseEntity.ok().body(pieceJoint1);
+
         } catch (Exception e) {
-            message = "Could not upload the pieceJoint: " + pieceJoint.getOriginalFilename() + "!";
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+                    .body("Could not upload the pieceJoint: " + pieceJoint.getOriginalFilename() + "!");
         }
     }
 
 
 
-    @PostMapping("/uploadPieceJoints")
-    public ResponseEntity<ResponseMessage> uploadFiles(@RequestParam("pieceJoints") MultipartFile[] pieceJoints) {
-        String message = "";
+    @PostMapping("/uploadPieceJoints/publication/{publicationId}")
+    public ResponseEntity<?> uploadFiles(@RequestParam("pieceJoints") MultipartFile[] pieceJoints, @PathVariable("publicationId")Long publicationId) {
+
         try {
-            List<String> pieceJointsNames = new ArrayList<>();
+            List<PieceJoint> pieces = new ArrayList<>();
 
             Arrays.asList(pieceJoints).stream().forEach(pieceJoint -> {
                 try {
-                    pieceJointServiceImpl.store(pieceJoint);
+                    PieceJoint pieceJoint1 = pieceJointServiceImpl.store(pieceJoint, publicationId);
+
+                    String pieceJointDownloadUri = ServletUriComponentsBuilder
+                            .fromCurrentContextPath()
+                            .path("/api/pieceJoint/")
+                            .path(pieceJoint1.getId().toString())
+                            .toUriString();
+                    pieceJoint1.setUrl(pieceJointDownloadUri);
+
+                    pieceJointServiceImpl.updatePieceJoint(pieceJoint1);
+                    pieces.add(pieceJoint1);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                pieceJointsNames.add(pieceJoint.getOriginalFilename());
+
             });
 
-            message = "Uploaded the files successfully: " + pieceJointsNames;
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+            return ResponseEntity.status(HttpStatus.OK).body(pieces);
         } catch (Exception e) {
-            message = "Fail to upload files!";
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Fail to upload pieceJoints!");
         }
     }
 
 
 
    @GetMapping("/all")
-    public ResponseEntity<List<ResponsePieceJoint>> getListPieceJoints() {
-        List<ResponsePieceJoint> pieceJoints = pieceJointServiceImpl.getAllPieceJoints().map(pieceJoint -> {
-            String pieceJointDownloadUri = ServletUriComponentsBuilder
-                    .fromCurrentContextPath()
-                    .path("/pieceJoints/")
-                    .path(pieceJoint.getId().toString())
-                    .toUriString();
-
-            return new ResponsePieceJoint(
-                    pieceJoint.getId(),
-                    pieceJoint.getName(),
-                    pieceJointDownloadUri,
-                    pieceJoint.getContentType(),
-                    pieceJoint.getData().length);
-        }).collect(Collectors.toList());
+    public ResponseEntity<List<PieceJoint>> getListPieceJoints() {
+        List<PieceJoint> pieceJoints = pieceJointServiceImpl.getAllPieceJoints().collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK).body(pieceJoints);
+    }
+
+
+    @GetMapping("/publication/{publicationId}")
+    public ResponseEntity<?> getListPieceJoints(@PathVariable("publicationId")Long publicationId) {
+        Optional<List<PieceJoint>> pieceJoints = pieceJointServiceImpl.getAllPieceJointsByPubId(publicationId);
+
+        if(pieceJoints.isPresent()){
+            return ResponseEntity.status(HttpStatus.OK).body(pieceJoints.get());
+        } else{
+            return ResponseEntity.status(HttpStatus.OK).body("This publication have no pieceJoints");
+        }
+
     }
 
 

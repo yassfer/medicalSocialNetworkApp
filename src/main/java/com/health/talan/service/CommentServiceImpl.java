@@ -39,15 +39,15 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Optional<Comment> findLikeByUserAndPublication(Long userId, Long publicationId){
+    public Optional<Comment> findCommentByUserAndPublication(Long userId, Long publicationId){
 
         return Optional.ofNullable(commentRepo.findByUserAndPublication(userId, publicationId)).orElse(null);
     }
 
     @Override
-    public String deleteLikeByUserAndPublication(Long userId, Long publicationId){
+    public String deleteCommentByUserAndPublication(Long userId, Long publicationId){
 
-        Optional<Comment> comment = findLikeByUserAndPublication(userId, publicationId);
+        Optional<Comment> comment = findCommentByUserAndPublication(userId, publicationId);
         if(comment.isPresent()){
             commentRepo.deleteById(comment.get().getId());
             return "comment Deleted";
@@ -56,6 +56,14 @@ public class CommentServiceImpl implements CommentService {
             return "comment doesn't exit";
         }
     }
+
+
+    @Override
+    public Optional<List<Comment>> findCommentByUser(Long userId){
+        Optional<List<Comment>> comments = commentRepo.findByUser(userId);
+        return comments;
+    }
+
 
     @Override
     public Comment saveComment(Comment comment, Long userId, Long pubId){

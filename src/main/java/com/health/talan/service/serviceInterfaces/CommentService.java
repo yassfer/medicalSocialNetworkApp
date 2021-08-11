@@ -11,9 +11,11 @@ public interface CommentService {
 
     public Optional<Comment> getCommentById(Long id);
 
-    public Optional<Comment> findLikeByUserAndPublication(Long userId, Long publicationId);
+    public Optional<Comment> findCommentByUserAndPublication(Long userId, Long publicationId);
 
-    public String deleteLikeByUserAndPublication(Long userId, Long publicationId);
+    public Optional<List<Comment>> findCommentByUser(Long userId);
+
+    public String deleteCommentByUserAndPublication(Long userId, Long publicationId);
 
     public Comment saveComment(Comment comment, Long userId, Long pubId);
 

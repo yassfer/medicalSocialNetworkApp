@@ -48,12 +48,25 @@ public class CommentController {
     @GetMapping("/user/{userId}/publication/{publicationId}")
     public ResponseEntity<?> getCommentByUserIdAndPublicationId(@PathVariable("userId")Long user_Id, @PathVariable("publicationId")Long publication_Id) {
 
-        Optional<Comment> comment = commentServiceImpl.findLikeByUserAndPublication(user_Id, publication_Id);
+        Optional<Comment> comment = commentServiceImpl.findCommentByUserAndPublication(user_Id, publication_Id);
         if (comment.isPresent()){
             return new ResponseEntity<>(comment, HttpStatus.OK);
         }
         else{
             return new ResponseEntity<>("There's no comment with those userId and publicationId", HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getCommentsByUserId(@PathVariable("userId")Long userId) {
+
+        Optional<List<Comment>> comments = commentServiceImpl.findCommentByUser(userId);
+        if (comments.isPresent()){
+            return new ResponseEntity<>(comments, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("There's no comments with that userId", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -85,7 +98,7 @@ public class CommentController {
     @DeleteMapping("/user/{userId}/publication/{publicationId}")
     public ResponseEntity<?> deleteCommentByUserAndPublication(@PathVariable("userId") Long userId, @PathVariable("publicationId") Long publicationId) {
 
-        String message = commentServiceImpl.deleteLikeByUserAndPublication(userId, publicationId);
+        String message = commentServiceImpl.deleteCommentByUserAndPublication(userId, publicationId);
         if (message.equals("Comment Deleted")) {
             return new ResponseEntity<>(message, HttpStatus.OK);
         } else {

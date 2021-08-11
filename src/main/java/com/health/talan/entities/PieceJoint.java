@@ -28,17 +28,21 @@ public class PieceJoint implements Serializable {
     private String name;
 
 
-    private Long size;
+    private int size;
 
 
     private String contentType;
 
 
+    private String url;
+
+
+    @JsonIgnore
     @Lob
     private byte[] data;
 
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "publication_pieceJoint")
     private Publication publication;
 
@@ -53,13 +57,88 @@ public class PieceJoint implements Serializable {
         super();
     }
 
-    public PieceJoint(String name, String contentType, byte[] data, Long size) {
+    public PieceJoint(String name, String contentType, byte[] data, int size) {
         this.name = name;
         this.contentType = contentType;
         this.data = data;
         this.size = size;
     }
 
+    public PieceJoint(String name, String contentType, byte[] data, int size, String url) {
+        this.name = name;
+        this.contentType = contentType;
+        this.data = data;
+        this.size = size;
+        this.url = url;
+    }
 
 
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
+    }
+
+    public Publication getPublication() {
+        return publication;
+    }
+
+    public void setPublication(Publication publication) {
+        this.publication = publication;
+    }
+
+    public PublicationChallenge getPublicationChallenge() {
+        return publicationChallenge;
+    }
+
+    public void setPublicationChallenge(PublicationChallenge publicationChallenge) {
+        this.publicationChallenge = publicationChallenge;
+    }
 }
