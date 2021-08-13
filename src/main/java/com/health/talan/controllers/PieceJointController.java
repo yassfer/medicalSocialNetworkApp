@@ -35,7 +35,8 @@ public class PieceJointController {
 
 
 
-    @PostMapping("/upload/publication/{publicationId}")
+    @PostMapping(value= "/upload/publication/{publicationId}", consumes = { MediaType.APPLICATION_JSON_VALUE,
+			MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<?> uploadPieceJoint(@RequestParam("pieceJoint") MultipartFile pieceJoint, @PathVariable("publicationId")Long publicationId) {
 
         try {

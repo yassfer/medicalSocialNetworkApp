@@ -19,19 +19,22 @@ public class PieceJointServiceImpl implements PieceJointService {
 
     private PieceJointRepo pieceJointRepo;
     private PublicationServiceImpl publicationServiceImpl;
-
+    private ChallengeService challengeService;
 
     @Autowired
-    public PieceJointServiceImpl(PieceJointRepo pieceJointRepo, PublicationServiceImpl publicationServiceImpl){
+    public PieceJointServiceImpl(PieceJointRepo pieceJointRepo, PublicationServiceImpl publicationServiceImpl,
+    		ChallengeService challengeService){
         this.pieceJointRepo = pieceJointRepo;
         this.publicationServiceImpl = publicationServiceImpl;
+        this.challengeService= challengeService;
     }
 
 
     @Override
     public PieceJoint store(MultipartFile pieceJoint, Long publicationId) throws IOException {
         String PieceJointName = StringUtils.cleanPath(pieceJoint.getOriginalFilename());
-        PieceJoint pieceJoint1 = new PieceJoint(PieceJointName, pieceJoint.getContentType(), pieceJoint.getBytes(), (int) pieceJoint.getSize());
+        PieceJoint pieceJoint1 = new PieceJoint(PieceJointName, pieceJoint.getContentType(), 
+        		challengeService.compressBytes(pieceJoint.getBytes()), (int) pieceJoint.getSize());
         Optional<Publication> pub = publicationServiceImpl.getPublicationById(publicationId);
         pieceJoint1.setPublication(pub.get());
 
@@ -40,6 +43,7 @@ public class PieceJointServiceImpl implements PieceJointService {
 
     @Override
     public PieceJoint updatePieceJoint(PieceJoint pieceJoint){
+    	//pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
         return pieceJointRepo.save(pieceJoint);
     }
 
@@ -47,7 +51,9 @@ public class PieceJointServiceImpl implements PieceJointService {
 
     @Override
     public Optional<PieceJoint> getPieceJoint(Long id) {
-        return Optional.ofNullable(pieceJointRepo.findById(id)).orElse(null);
+    	Optional<PieceJoint> pieceJoint = Optional.ofNullable(pieceJointRepo.findById(id)).orElse(null);
+    	pieceJoint.get().setData(challengeService.decompressBytes(pieceJoint.get().getData()));
+        return pieceJoint;
     }
 
 

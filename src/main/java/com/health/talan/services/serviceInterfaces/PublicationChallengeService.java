@@ -1,5 +1,6 @@
 package com.health.talan.services.serviceInterfaces;
 
+import com.health.talan.entities.Liking;
 import com.health.talan.entities.PublicationChallenge;
 
 import java.util.List;

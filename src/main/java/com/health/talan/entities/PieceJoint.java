@@ -33,7 +33,7 @@ public class PieceJoint implements Serializable {
     private String url;
 
 
-    @JsonIgnore
+    //@JsonIgnore
     @Lob
     private byte[] data;
 

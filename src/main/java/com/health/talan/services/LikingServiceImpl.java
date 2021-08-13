@@ -3,6 +3,7 @@ package com.health.talan.services;
 import com.health.talan.repositories.LikingRepo;
 import com.health.talan.entities.Liking;
 import com.health.talan.entities.Publication;
+import com.health.talan.entities.PublicationChallenge;
 import com.health.talan.entities.User;
 import com.health.talan.services.serviceInterfaces.LikingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +18,15 @@ public class LikingServiceImpl implements LikingService {
         private final LikingRepo likingRepo;
         private final UserServiceImpl userServiceImpl;
         private final PublicationServiceImpl publicationServiceImpl;
-
+        private final PublicationChallengeServiceImpl publicationChallengeServiceImpl;
         @Autowired
-        public LikingServiceImpl(LikingRepo likingRepo, UserServiceImpl userServiceImpl, PublicationServiceImpl publicationServiceImpl){
+        public LikingServiceImpl(LikingRepo likingRepo, UserServiceImpl userServiceImpl, 
+        		PublicationServiceImpl publicationServiceImpl, PublicationChallengeServiceImpl publicationChallengeServiceImpl){
 
             this.likingRepo = likingRepo;
             this.userServiceImpl = userServiceImpl;
             this.publicationServiceImpl = publicationServiceImpl;
+            this.publicationChallengeServiceImpl= publicationChallengeServiceImpl;
         }
 
         @Override
@@ -63,6 +66,18 @@ public class LikingServiceImpl implements LikingService {
             Optional<User> user = userServiceImpl.getUserById(userId);
             Optional<Publication> publication = publicationServiceImpl.getPublicationById(pubId);
             like.setPublication(publication.get());
+            like.setUser(user.get());
+            Liking newLike = likingRepo.save(like);
+            return newLike;
+        }
+        
+        //Save Like For Publication Challenge
+        @Override
+        public Liking saveLikeChallenge(Long userId, Long pubId){
+        	Liking like = new Liking();
+            Optional<User> user = userServiceImpl.getUserById(userId);
+            Optional<PublicationChallenge> publicationChallenge = publicationChallengeServiceImpl.getPublicationChallengeById(pubId);
+            like.setPublicationChallenge(publicationChallenge.get());
             like.setUser(user.get());
             Liking newLike = likingRepo.save(like);
             return newLike;

@@ -18,4 +18,6 @@ public interface LikingService {
     public Liking saveLike(Long userId, Long pubId);
 
     public String deleteLiking(Long id);
+    
+    public Liking saveLikeChallenge(Long userId, Long pubId);
 }

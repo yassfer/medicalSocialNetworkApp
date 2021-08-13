@@ -1,6 +1,8 @@
 package com.health.talan.controllers;
 
+import com.health.talan.entities.PieceJoint;
 import com.health.talan.entities.Publication;
+import com.health.talan.services.ChallengeService;
 import com.health.talan.services.PublicationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,12 +20,13 @@ import java.util.Optional;
 public class PublicationController {
 
     private final PublicationServiceImpl publicationServiceImpl;
-
+    private final ChallengeService challengeService;
 
     @Autowired
-    public PublicationController(PublicationServiceImpl publicationServiceImpl) {
+    public PublicationController(PublicationServiceImpl publicationServiceImpl, ChallengeService challengeService) {
 
         this.publicationServiceImpl = publicationServiceImpl;
+        this.challengeService = challengeService;
     }
 
 
@@ -49,6 +52,11 @@ public class PublicationController {
 
         Optional<List<Publication>> publications = publicationServiceImpl.getPublicationByUserId(userId);
         if (publications.isPresent()) {
+        	for (Publication publication : publications.get()) {
+				for (PieceJoint pieceJoint : publication.getPieceJoints()) {
+					pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
+				}
+			}
             return new ResponseEntity<>(publications, HttpStatus.OK);
         }
         return new ResponseEntity<>("that user have no publications", HttpStatus.OK);
