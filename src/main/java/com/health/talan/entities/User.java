@@ -166,7 +166,7 @@ public class User implements Serializable {
 
 
 	public User(String firstName, String lastName, String mail, String username, String password,
-				Date birthDate, String address, PieceJoint image, String profession, boolean professionnalisme) {
+				Date birthDate, String address, String profession, boolean professionnalisme) {
 
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -175,10 +175,16 @@ public class User implements Serializable {
 		this.password = password;
 		this.birthDate = birthDate;
 		this.address = address;
-		this.image = image;
 		this.profession = profession;
 		this.professionnalisme = professionnalisme;
 	}
+	
+	/*public User(String firstName, String username, String email, String password) {
+        this.firstName = firstName;
+        this.username = username;
+        this.mail = mail;
+        this.password = password;
+    }*/
 
 
 	public Long getId() {
