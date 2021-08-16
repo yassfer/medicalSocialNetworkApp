@@ -68,7 +68,7 @@ public class PublicationServiceImpl implements PublicationService {
     public String deletePublication(Long id){
         Optional<Publication> publication = publicationRepo.findById(id);
         if(publication.isPresent()){
-            publicationRepo.deleteById(id);
+            publicationRepo.deletePublicationById(id);
             return "Publication Deleted";
         }
         else {

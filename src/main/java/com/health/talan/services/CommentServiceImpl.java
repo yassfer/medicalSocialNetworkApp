@@ -82,7 +82,7 @@ public class CommentServiceImpl implements CommentService {
     public String deleteComment(Long id){
         Optional<Comment> comment = commentRepo.findById(id);
         if(comment.isPresent()){
-            commentRepo.deleteById(id);
+            commentRepo.deleteCommenById(id);
             return "Comment Deleted";
         }
         else {
