@@ -81,12 +81,13 @@ public class User implements Serializable {
 	private Set<Amis> amis = new HashSet<>();
 
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "adminCom")
-	private Set<Community> myCommunities = new HashSet<>();
-
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "adminCom", fetch = FetchType.EAGER)
+	private Set<Community> myCommunities;
+	
+	 
 	@JsonIgnore
-	@ManyToMany(cascade = CascadeType.ALL)
-	private Set<Community> communitiesParticipate = new HashSet<>();
+	@ManyToMany(mappedBy="participants" , cascade = CascadeType.ALL)
+	private Set<Community> communitiesParticipate;
 
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
