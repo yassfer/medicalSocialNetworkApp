@@ -1,4 +1,4 @@
-package com.health.talan.services;
+package com.health.talan.services.serviceInterfaces;
 
 import java.io.IOException;
 import java.util.List;

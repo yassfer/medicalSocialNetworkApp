@@ -7,6 +7,7 @@ import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
+import com.health.talan.services.serviceInterfaces.IChallangeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,17 +22,18 @@ public class ChallengeService implements IChallangeService {
 
 	ChallangeRepository challangeRepository;	
 	UserRepository userRepository;
+	AuthService authService;
 
 	@Autowired
-	public ChallengeService(ChallangeRepository challangeRepository, UserRepository userRepository) {
+	public ChallengeService(ChallangeRepository challangeRepository, UserRepository userRepository, AuthService authService) {
 		this.challangeRepository = challangeRepository;
 		this.userRepository = userRepository;
+		this.authService = authService;
 	}
 
 	@Override
-	public Long addChallenge(Long id, Challenge challange) {
-		User user = userRepository.findById(id).get();
-		challange.setAdminChallenge(user);
+	public Long addChallenge(Challenge challange) {
+		challange.setAdminChallenge(authService.getCURRENTUSER());
 		challangeRepository.save(challange);
 		return challange.getId();
 	}
@@ -74,9 +76,9 @@ public class ChallengeService implements IChallangeService {
 	}
 
 	// Display By Admin Challenge
-	public List<Challenge> getByAdmin(String idAdmin) throws IOException {
-		long id = Long.parseLong(idAdmin);
-		User user = userRepository.findById(id).get();
+	@Override
+	public List<Challenge> getByAdmin() throws IOException {
+		User user = authService.getCURRENTUSER();
 		List<Challenge> challenges = (List<Challenge>) challangeRepository.findByAdminChallenge(user);
 		for (Challenge challenge : challenges) {
 			challenge.setPieceJoint(decompressBytes(challenge.getPieceJoint()));

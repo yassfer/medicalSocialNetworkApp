@@ -14,4 +14,10 @@ public interface UserService {
     public User SaveUser(User user);
 
     public String deleteUser(Long id);
+
+    public User findUserByUsername(String username);
+
+    public Long findUserIdByUsername(String username);
+
+    public int getScoreById(Long id);
 }

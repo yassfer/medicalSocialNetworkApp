@@ -48,5 +48,22 @@ public class UserServiceImpl implements UserService {
             return "User doesn't exit";
         }
     }
+    @Override
+    public User findUserByUsername(String username) {
+        return userRepo.findByUsername(username).get();
+    }
+
+    @Override
+    public Long findUserIdByUsername(String username) {
+        System.out.println("testID:: "+findUserByUsername(username).getId());
+        return findUserByUsername(username).getId();
+    }
+
+    @Override
+    public int getScoreById(Long id) {
+        Optional<User> user = userRepo.findById(id);
+        return user.get().getScore();
+    }
+
 }
 

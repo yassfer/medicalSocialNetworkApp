@@ -7,6 +7,7 @@ import com.health.talan.services.PublicationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,14 +28,14 @@ public class PublicationController {
 		this.publicationServiceImpl = publicationServiceImpl;
 		this.challengeService = challengeService;
 	}
-
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("/all")
 	public ResponseEntity<List<Publication>> getAllPublications() {
 
 		List<Publication> publications = publicationServiceImpl.getAllPublications();
 		return new ResponseEntity<>(publications, HttpStatus.OK);
 	}
-
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getPublicationById(@PathVariable("id") Long id) {
 		Optional<Publication> publication = publicationServiceImpl.getPublicationById(id);
@@ -44,7 +45,7 @@ public class PublicationController {
 
 		return new ResponseEntity<>("publication not found", HttpStatus.OK);
 	}
-
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("/user/{userId}")
 	public ResponseEntity<?> getAllPublicationsByUserId(@PathVariable("userId") Long userId) {
 
@@ -59,7 +60,7 @@ public class PublicationController {
 		}
 		return new ResponseEntity<>("that user have no publications", HttpStatus.OK);
 	}
-
+	@PreAuthorize("hasAuthority('USER')")
 	@PostMapping("/{userId}")
 	public ResponseEntity<Publication> publishPublication(@RequestBody Publication publication,
 			@PathVariable("userId") Long userId) {
@@ -67,7 +68,7 @@ public class PublicationController {
 		Publication newPublication = publicationServiceImpl.publishPublication(publication, userId);
 		return new ResponseEntity<>(newPublication, HttpStatus.OK);
 	}
-
+	@PreAuthorize("hasAuthority('USER')")
 	@PatchMapping("/{id}/user/{userId}")
 	public ResponseEntity<?> updatePublication(@PathVariable("id") Long id, @PathVariable("userId") Long userId,
 			@RequestBody Publication publication) {
@@ -81,7 +82,7 @@ public class PublicationController {
 		}
 
 	}
-
+	@PreAuthorize("hasAuthority('USER')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deletePublication(@PathVariable("id") Long id) {
 

@@ -42,8 +42,25 @@ public class PieceJointServiceImpl implements PieceJointService {
     }
 
     @Override
-    public PieceJoint updatePieceJoint(PieceJoint pieceJoint){
-    	//pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
+    public PieceJoint store2(MultipartFile pieceJoint) throws IOException {
+        String PieceJointName = StringUtils.cleanPath(pieceJoint.getOriginalFilename());
+        PieceJoint pieceJoint1 = new PieceJoint(PieceJointName, pieceJoint.getContentType(),
+                challengeService.compressBytes(pieceJoint.getBytes()), (int) pieceJoint.getSize());
+
+        return pieceJointRepo.save(pieceJoint1);
+    }
+
+    @Override
+    public PieceJoint updatePieceJoint(PieceJoint pieceJoint, Long pubId){
+        Optional<Publication> pub = publicationServiceImpl.getPublicationById(pubId);
+        pieceJoint.setPublication(pub.get());
+    	pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
+        return pieceJointRepo.save(pieceJoint);
+    }
+
+    @Override
+    public PieceJoint updatePieceJoint2(PieceJoint pieceJoint){
+        pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
         return pieceJointRepo.save(pieceJoint);
     }
 

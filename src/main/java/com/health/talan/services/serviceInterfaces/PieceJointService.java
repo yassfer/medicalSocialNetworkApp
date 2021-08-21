@@ -18,7 +18,11 @@ public interface PieceJointService {
 
     public Optional<List<PieceJoint>> getAllPieceJointsByPubId(Long publicationId);
 
-    public PieceJoint updatePieceJoint(PieceJoint pieceJoint);
+    public PieceJoint updatePieceJoint(PieceJoint pieceJoint, Long pubId);
+
+    public PieceJoint store2(MultipartFile pieceJoint) throws IOException;
+
+    public PieceJoint updatePieceJoint2(PieceJoint pieceJoint);
 
 
 }

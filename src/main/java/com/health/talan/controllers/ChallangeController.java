@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,11 +35,13 @@ public class ChallangeController {
 	@Autowired
 	UserRepository userRepository;
 
-	@PostMapping("add/{id}")
-	public Long addChallenge(@PathVariable Long id, @RequestBody Challenge challange) {
-		return challangeService.addChallenge(id, challange);
-	};
+	@PreAuthorize("hasAuthority('USER')")
+	@PostMapping("add")
+	public Long addChallenge(@RequestBody Challenge challange) {
+		return challangeService.addChallenge(challange);
+	}
 
+	@PreAuthorize("hasAuthority('USER')")
 	@PutMapping(value = "sendFile/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
 	public void uplaodImage(@PathVariable("id") String id, @RequestParam("imageFile") MultipartFile file)
@@ -46,26 +49,31 @@ public class ChallangeController {
 		challangeService.uplaodImage(id, file);
 	}
 
+	@PreAuthorize("hasAuthority('USER')")
 	@DeleteMapping("delete/{id}")
 	public void deleteChallange(@PathVariable Long id) {
 		challangeService.deleteChallange(id);
 	}
 
+	@PreAuthorize("hasAuthority('USER')")
 	@PutMapping("update/{id}")
 	public void updateChallange(@PathVariable Long id, @RequestBody Challenge challange) {
 		challangeService.updateChallange(id, challange);
 	}
 
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("getAll")
 	public List<Challenge> displayAll() throws IOException {
 		return challangeService.getAll();
 	}
 
-	@GetMapping("getMyChallenges/{id}")
-	public List<Challenge> displayByAdmin(@PathVariable String id) throws IOException {
-		return challangeService.getByAdmin(id);
+	@PreAuthorize("hasAuthority('USER')")
+	@GetMapping("getMyChallenges")
+	public List<Challenge> displayByAdmin() throws IOException {
+		return challangeService.getByAdmin();
 	}
 
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("getById/{id}")
 	public Challenge displayById(@PathVariable Long id) {
 		return challangeService.displayById(id);

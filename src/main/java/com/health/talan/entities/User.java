@@ -3,20 +3,7 @@ package com.health.talan.entities;
 import java.io.Serializable;
 import java.util.*;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -62,6 +49,13 @@ public class User implements Serializable {
 
 	@Column(name = "professionnalisme")
 	private boolean professionnalisme;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "recommander", referencedColumnName = "id")
+	private User recommander;
+
+	@Column(name= "score")
+	private int score;
 
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -138,7 +132,7 @@ public class User implements Serializable {
 	}
 
 	public User(String firstName, String lastName, String mail, String username, String password, Date birthDate,
-			String address, String profession, boolean professionnalisme) {
+				String address, String profession, boolean professionnalisme, User recommander) {
 
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -149,6 +143,7 @@ public class User implements Serializable {
 		this.address = address;
 		this.profession = profession;
 		this.professionnalisme = professionnalisme;
+		this.recommander= recommander;
 	}
 
 	public Long getId() {
@@ -375,18 +370,35 @@ public class User implements Serializable {
 		this.comments = comments;
 	}
 
+	public User getRecommander() {
+		return recommander;
+	}
+
+	public void setRecommander(User recommander) {
+		this.recommander = recommander;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", mail=" + mail
 				+ ", username=" + username + ", password=" + password + ", birthDate=" + birthDate + ", address="
 				+ address + ", image=" + image + ", profession=" + profession + ", professionnalisme="
-				+ professionnalisme + ", roles=" + roles + ", interests=" + interests + ", pieceJustifs=" + pieceJustifs
-				+ ", amis=" + amis + ", myCommunities=" + myCommunities + ", communitiesParticipate="
-				+ communitiesParticipate + ", entreprises=" + entreprises + ", participants=" + participants
-				+ ", events=" + events + ", invitationsSend=" + invitationsSend + ", invitationsReceive="
-				+ invitationsReceive + ", publicities=" + publicities + ", publications=" + publications
-				+ ", myChallenge=" + myChallenge + ", publicationChallenges=" + publicationChallenges + ", likes="
-				+ likes + ", comments=" + comments + "]";
+				+ professionnalisme + ", recommander=" + recommander + ", score="
+				+ score + ", roles=" + roles + ", interests=" + interests + ", pieceJustifs=" + pieceJustifs + ", amis="
+				+ amis + ", myCommunities=" + myCommunities + ", communitiesParticipate=" + communitiesParticipate
+				+ ", entreprises=" + entreprises + ", participants=" + participants + ", events=" + events
+				+ ", invitationsSend=" + invitationsSend + ", invitationsReceive=" + invitationsReceive
+				+ ", publicities=" + publicities + ", publications=" + publications + ", myChallenge=" + myChallenge
+				+ ", publicationChallenges=" + publicationChallenges + ", likes=" + likes + ", comments=" + comments
+				+ "]";
 	}
 
 }

@@ -16,8 +16,6 @@ public class MedicalSocialNetworkApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MedicalSocialNetworkApplication.class, args);
 	}
-
-
 	@Bean
 	public CorsFilter corsFilter() {
 		UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();

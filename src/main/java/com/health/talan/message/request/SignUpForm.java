@@ -33,6 +33,7 @@ public class SignUpForm {
 	private String address;
 	private String profession;
 	private boolean professionnalisme;
+	private String recommander;
 
 	public String getFirstName() {
 		return firstName;
@@ -112,5 +113,13 @@ public class SignUpForm {
 
 	public void setProfessionnalisme(boolean professionnalisme) {
 		this.professionnalisme = professionnalisme;
+	}
+
+	public String getRecommander() {
+		return recommander;
+	}
+
+	public void setRecommander(String recommander) {
+		this.recommander = recommander;
 	}
 }
