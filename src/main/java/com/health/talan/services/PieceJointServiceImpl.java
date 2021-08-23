@@ -23,7 +23,7 @@ public class PieceJointServiceImpl implements PieceJointService {
 
     @Autowired
     public PieceJointServiceImpl(PieceJointRepo pieceJointRepo, PublicationServiceImpl publicationServiceImpl,
-    		ChallengeService challengeService){
+                                 ChallengeService challengeService){
         this.pieceJointRepo = pieceJointRepo;
         this.publicationServiceImpl = publicationServiceImpl;
         this.challengeService= challengeService;
@@ -33,8 +33,8 @@ public class PieceJointServiceImpl implements PieceJointService {
     @Override
     public PieceJoint store(MultipartFile pieceJoint, Long publicationId) throws IOException {
         String PieceJointName = StringUtils.cleanPath(pieceJoint.getOriginalFilename());
-        PieceJoint pieceJoint1 = new PieceJoint(PieceJointName, pieceJoint.getContentType(), 
-        		challengeService.compressBytes(pieceJoint.getBytes()), (int) pieceJoint.getSize());
+        PieceJoint pieceJoint1 = new PieceJoint(PieceJointName, pieceJoint.getContentType(),
+                challengeService.compressBytes(pieceJoint.getBytes()), (int) pieceJoint.getSize());
         Optional<Publication> pub = publicationServiceImpl.getPublicationById(publicationId);
         pieceJoint1.setPublication(pub.get());
 
@@ -46,7 +46,6 @@ public class PieceJointServiceImpl implements PieceJointService {
         String PieceJointName = StringUtils.cleanPath(pieceJoint.getOriginalFilename());
         PieceJoint pieceJoint1 = new PieceJoint(PieceJointName, pieceJoint.getContentType(),
                 challengeService.compressBytes(pieceJoint.getBytes()), (int) pieceJoint.getSize());
-
         return pieceJointRepo.save(pieceJoint1);
     }
 
@@ -54,13 +53,13 @@ public class PieceJointServiceImpl implements PieceJointService {
     public PieceJoint updatePieceJoint(PieceJoint pieceJoint, Long pubId){
         Optional<Publication> pub = publicationServiceImpl.getPublicationById(pubId);
         pieceJoint.setPublication(pub.get());
-    	pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
+        //pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
         return pieceJointRepo.save(pieceJoint);
     }
 
     @Override
     public PieceJoint updatePieceJoint2(PieceJoint pieceJoint){
-        pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
+        //pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
         return pieceJointRepo.save(pieceJoint);
     }
 
@@ -68,8 +67,8 @@ public class PieceJointServiceImpl implements PieceJointService {
 
     @Override
     public Optional<PieceJoint> getPieceJoint(Long id) {
-    	Optional<PieceJoint> pieceJoint = Optional.ofNullable(pieceJointRepo.findById(id)).orElse(null);
-    	pieceJoint.get().setData(challengeService.decompressBytes(pieceJoint.get().getData()));
+        Optional<PieceJoint> pieceJoint = Optional.ofNullable(pieceJointRepo.findById(id)).orElse(null);
+        //pieceJoint.get().setData(challengeService.decompressBytes(pieceJoint.get().getData()));
         return pieceJoint;
     }
 

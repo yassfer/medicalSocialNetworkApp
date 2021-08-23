@@ -20,4 +20,5 @@ public interface CommentService {
     public Comment saveComment(Comment comment, Long userId, Long pubId);
 
     public String deleteComment(Long id);
+
 }

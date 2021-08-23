@@ -41,8 +41,9 @@ public class User implements Serializable {
 	@Column(name = "address")
 	private String address;
 
+	@Lob
 	@Column(name = "image")
-	private PieceJoint image;
+	private byte[] image;
 
 	@Column(name = "profession")
 	private String profession;
@@ -56,6 +57,9 @@ public class User implements Serializable {
 
 	@Column(name= "score")
 	private int score;
+
+	@Column(name= "connected")
+	private boolean connected;
 
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -71,8 +75,11 @@ public class User implements Serializable {
 	private Set<PieceJustif> pieceJustifs = new HashSet<>();
 
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	private Set<Amis> amis = new HashSet<>();
+	@ManyToMany
+	@JoinTable( name = "relationship",
+			joinColumns = @JoinColumn( name = "idMe" ),
+			inverseJoinColumns = @JoinColumn( name = "idFriend" ))
+	private Set<User> friends;
 
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "adminCom", fetch = FetchType.EAGER)
@@ -210,11 +217,11 @@ public class User implements Serializable {
 		this.address = address;
 	}
 
-	public PieceJoint getImage() {
+	public byte[] getImage() {
 		return image;
 	}
 
-	public void setImage(PieceJoint image) {
+	public void setImage(byte[] image) {
 		this.image = image;
 	}
 
@@ -246,6 +253,14 @@ public class User implements Serializable {
 		return interests;
 	}
 
+	public boolean isConnected() {
+		return connected;
+	}
+
+	public void setConnected(boolean connected) {
+		this.connected = connected;
+	}
+
 	public void setInterests(Set<Interest> interests) {
 		this.interests = interests;
 	}
@@ -258,12 +273,12 @@ public class User implements Serializable {
 		this.pieceJustifs = pieceJustifs;
 	}
 
-	public Set<Amis> getAmis() {
-		return amis;
+	public Set<User> getFriends() {
+		return friends;
 	}
 
-	public void setAmis(Set<Amis> amis) {
-		this.amis = amis;
+	public void setFriends(Set<User> friends) {
+		this.friends = friends;
 	}
 
 	public Set<Community> getMyCommunities() {
@@ -388,17 +403,38 @@ public class User implements Serializable {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", mail=" + mail
-				+ ", username=" + username + ", password=" + password + ", birthDate=" + birthDate + ", address="
-				+ address + ", image=" + image + ", profession=" + profession + ", professionnalisme="
-				+ professionnalisme + ", recommander=" + recommander + ", score="
-				+ score + ", roles=" + roles + ", interests=" + interests + ", pieceJustifs=" + pieceJustifs + ", amis="
-				+ amis + ", myCommunities=" + myCommunities + ", communitiesParticipate=" + communitiesParticipate
-				+ ", entreprises=" + entreprises + ", participants=" + participants + ", events=" + events
-				+ ", invitationsSend=" + invitationsSend + ", invitationsReceive=" + invitationsReceive
-				+ ", publicities=" + publicities + ", publications=" + publications + ", myChallenge=" + myChallenge
-				+ ", publicationChallenges=" + publicationChallenges + ", likes=" + likes + ", comments=" + comments
-				+ "]";
+		return "User{" +
+				"id=" + id +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", mail='" + mail + '\'' +
+				", username='" + username + '\'' +
+				", password='" + password + '\'' +
+				", birthDate=" + birthDate +
+				", address='" + address + '\'' +
+				", image=" + Arrays.toString(image) +
+				", profession='" + profession + '\'' +
+				", professionnalisme=" + professionnalisme +
+				", recommander=" + recommander +
+				", score=" + score +
+				", connected=" + connected +
+				", roles=" + roles +
+				", interests=" + interests +
+				", pieceJustifs=" + pieceJustifs +
+				", friends=" + friends +
+				", myCommunities=" + myCommunities +
+				", communitiesParticipate=" + communitiesParticipate +
+				", entreprises=" + entreprises +
+				", participants=" + participants +
+				", events=" + events +
+				", invitationsSend=" + invitationsSend +
+				", invitationsReceive=" + invitationsReceive +
+				", publicities=" + publicities +
+				", publications=" + publications +
+				", myChallenge=" + myChallenge +
+				", publicationChallenges=" + publicationChallenges +
+				", likes=" + likes +
+				", comments=" + comments +
+				'}';
 	}
-
 }

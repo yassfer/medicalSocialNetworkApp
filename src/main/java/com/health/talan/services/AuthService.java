@@ -1,10 +1,14 @@
 package com.health.talan.services;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,6 +51,8 @@ public class AuthService {
     @Autowired
     JwtProvider jwtProvider;
 
+    @Autowired
+    ChallengeService challengeService;
 
 
 
@@ -84,13 +90,14 @@ public class AuthService {
         String jwt = jwtProvider.generateJwtToken(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User currentUser = userRepository.findByUsername(userDetails.getUsername()).get();
+        currentUser.setConnected(true);
+        userRepository.save(currentUser);
         AuthService.setCURRENTUSER(currentUser);
         AuthService.setIDCURRENTUSER(currentUser.getId());
-        System.out.println("id::: " + currentUser.getId());
         return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername(), userDetails.getAuthorities(), currentUser.getId()));
     }
 
-    public ResponseEntity<ResponseMessage> registerUser(SignUpForm signUpRequest) {
+    public ResponseEntity<ResponseMessage> registerUser(SignUpForm signUpRequest) throws IOException {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return new ResponseEntity<>(new ResponseMessage("Fail -> Username is already taken!"),
                     HttpStatus.BAD_REQUEST);
@@ -104,7 +111,10 @@ public class AuthService {
                 signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()), signUpRequest.getBirthDate(),
                 signUpRequest.getAddress(), signUpRequest.getProfession(), signUpRequest.isProfessionnalisme(),null);
         user.setScore(0);
-
+        user.setConnected(false);
+        File resource = new ClassPathResource("user-profile.jpg").getFile();
+        byte[] file = Files.readAllBytes(resource.toPath());
+        user.setImage(challengeService.compressBytes(file));
         Optional<User> recommendedBy = Optional.ofNullable(userRepository.findByUsername(signUpRequest.getRecommander())).orElse(null);
         if(recommendedBy.isPresent()==true) {
             user.setRecommander(recommendedBy.get());

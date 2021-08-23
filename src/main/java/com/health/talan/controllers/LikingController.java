@@ -80,6 +80,8 @@ public class LikingController {
 		}
 	}
 
+
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteLike(@PathVariable("id") Long id) {
 

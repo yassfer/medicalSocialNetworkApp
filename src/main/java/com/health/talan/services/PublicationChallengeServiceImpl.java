@@ -1,6 +1,6 @@
 package com.health.talan.services;
 
-import com.health.talan.repositories.PublicationChallengeRepo;
+import com.health.talan.repositories.*;
 import com.health.talan.entities.Challenge;
 import com.health.talan.entities.PublicationChallenge;
 import com.health.talan.entities.User;
@@ -19,14 +19,20 @@ public class PublicationChallengeServiceImpl implements PublicationChallengeServ
     private final PublicationChallengeRepo publicationChallengeRepo;
     private final ChallengeService challengeServiceImpl;
     private final UserServiceImpl userServiceImpl;
+    private final LikingRepo likingRepo;
+    private final PieceJointRepo pieceJointRepo;
 
     @Autowired
-    public PublicationChallengeServiceImpl(ChallengeService challengeServiceImpl, PublicationChallengeRepo publicationChallengeRepo, UserServiceImpl userServiceImpl){
+    public PublicationChallengeServiceImpl(ChallengeService challengeServiceImpl, PublicationChallengeRepo publicationChallengeRepo,
+                                           UserServiceImpl userServiceImpl, LikingRepo likingRepo, PieceJointRepo pieceJointRepo){
 
         this.publicationChallengeRepo = publicationChallengeRepo;
         this.challengeServiceImpl = challengeServiceImpl;
         this.userServiceImpl = userServiceImpl;
+        this.likingRepo = likingRepo;
+        this.pieceJointRepo = pieceJointRepo;
     }
+
 
     @Override
     public List<PublicationChallenge> getAllChallengePublications() {
@@ -157,6 +163,8 @@ public class PublicationChallengeServiceImpl implements PublicationChallengeServ
     public String deletePublicationChallenge(Long id){
         Optional<PublicationChallenge> publicationChallenge = publicationChallengeRepo.findById(id);
         if(publicationChallenge.isPresent()){
+            likingRepo.deleteByPublicationId(id);
+            pieceJointRepo.deleteByPublicationId(id);
             publicationChallengeRepo.deleteById(id);
             return "Challenge Publication Deleted";
         }

@@ -1,5 +1,7 @@
 package com.health.talan.controllers;
 
+import java.io.IOException;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +54,7 @@ public class AuthRestAPIs {
 	}
 
 	@PostMapping("/signup")
-	public ResponseEntity<ResponseMessage> registerUser(@Valid @RequestBody SignUpForm signUpRequest) {
+	public ResponseEntity<ResponseMessage> registerUser(@Valid @RequestBody SignUpForm signUpRequest) throws IOException {
 		return authService.registerUser(signUpRequest);
 	}
 }

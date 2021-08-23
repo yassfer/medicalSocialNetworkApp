@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 
 @CrossOrigin(origins = "http://localhost:4200")
-@Controller
+@RestController
 @RequestMapping("api/pieceJoint")
 public class PieceJointController {
 
@@ -37,7 +37,7 @@ public class PieceJointController {
 
 
     @PostMapping(value= "/upload/publication/{publicationId}", consumes = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.MULTIPART_FORM_DATA_VALUE })
+            MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<?> uploadPieceJoint(@RequestParam("pieceJoint") MultipartFile pieceJoint, @PathVariable("publicationId")Long publicationId) {
 
         try {
@@ -132,7 +132,7 @@ public class PieceJointController {
 
 
 
-   @GetMapping("/all")
+    @GetMapping("/all")
     public ResponseEntity<List<PieceJoint>> getListPieceJoints() {
         List<PieceJoint> pieceJoints = pieceJointServiceImpl.getAllPieceJoints().collect(Collectors.toList());
 
@@ -156,10 +156,16 @@ public class PieceJointController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<byte[]> getPieceJoint(@PathVariable Long id) {
+    public ResponseEntity<?> getPieceJoint(@PathVariable Long id) {
         Optional<PieceJoint> pieceJoint = pieceJointServiceImpl.getPieceJoint(id);
 
-        if (!pieceJoint.isPresent()) {
+        if (pieceJoint.isPresent()) {
+            return new ResponseEntity<>(pieceJoint, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("publication not found", HttpStatus.OK);
+
+        /*if (!pieceJoint.isPresent()) {
             return ResponseEntity.notFound()
                     .build();
         }
@@ -168,12 +174,11 @@ public class PieceJointController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + pieceJoint1.getName() + "\"")
                 .contentType(MediaType.valueOf(pieceJoint1.getContentType()))
-                .body(pieceJoint1.getData());
+                .body(pieceJoint1.getData());*/
     }
 
-
     @PatchMapping("/publication/{publicationId}")
-    public ResponseEntity<?> updatePublication(@PathVariable("publicationId") Long publicationId, @RequestParam PieceJoint[] pieceJoints) {
+    public ResponseEntity<?> updatePublication(@PathVariable("publicationId") Long publicationId, @RequestBody PieceJoint[] pieceJoints) {
         for(PieceJoint pieceJoint : pieceJoints){
             Optional<PieceJoint> updatedPieceJoint = pieceJointServiceImpl.getPieceJoint(pieceJoint.getId());
             if (updatedPieceJoint.isPresent()) {
@@ -184,9 +189,9 @@ public class PieceJointController {
             }
         }
 
-            return new ResponseEntity<>("update done successfully", HttpStatus.OK);
-        }
-
+        return new ResponseEntity<>("update done successfully", HttpStatus.OK);
     }
+
+}
 
 

@@ -36,13 +36,13 @@ public class Publication implements Serializable {
 
 
 	@JsonIgnoreProperties(value = {"publication", "handler","hibernateLazyInitializer"}, allowSetters = true)
-	@OneToMany(mappedBy = "publication", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "publication")
 	private Set<Liking> likes = new HashSet<>();
 
 
 
 	@JsonIgnoreProperties(value = {"publication", "handler","hibernateLazyInitializer"}, allowSetters = true)
-	@OneToMany(mappedBy = "publication", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "publication")
 	private Set<Comment> comments = new HashSet<>();
 
 
