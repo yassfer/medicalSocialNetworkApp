@@ -1,20 +1,13 @@
 package com.health.talan.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "invitation")
 public class Invitation implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -28,6 +21,21 @@ public class Invitation implements Serializable {
 	@JoinColumn(name = "id_receiver")
 	private User receiver;
 
+	@Temporal(TemporalType.DATE)
+	@Column(name = "date")
+	private Date date;
+
+	@Temporal(TemporalType.TIME)
+	@Column(name = "time")
+	private Date time;
+
+
+	@Transient
+	private String since;
+
+	@Temporal(TemporalType.TIME)
+	@Transient
+	private Date timeChecked;
 	public Invitation() {
 		super();
 	}
@@ -56,9 +64,43 @@ public class Invitation implements Serializable {
 		this.receiver = receiver;
 	}
 
-	@Override
-	public String toString() {
-		return "Invitation [id=" + id + ", sender=" + sender + ", receiver=" + receiver + "]";
+
+	public Date getDate() {
+		return date;
 	}
 
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public Date getTime() {
+		return time;
+	}
+
+	public void setTime(Date time) {
+		this.time = time;
+	}
+
+
+	public String getSince() {
+		return since;
+	}
+
+	public void setSince(String since) {
+		this.since = since;
+	}
+
+	public Date getTimeChecked() {
+		return timeChecked;
+	}
+
+	public void setTimeChecked(Date timeChecked) {
+		this.timeChecked = timeChecked;
+	}
+
+	@Override
+	public String toString() {
+		return "Invitation [id=" + id + ", sender=" + sender + ", receiver=" + receiver + ", date=" + date + ", time="
+				+ time + ", since=" + since + ", timeChecked=" + timeChecked + "]";
+	}
 }

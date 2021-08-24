@@ -23,6 +23,12 @@ public class MessageController {
 
     }
 
+    @GetMapping("/receiverId/{receiverId}")
+    public List<Message> getAllMsgByReceiver(@PathVariable("receiverId") Long id) throws IOException {
+        return msgService.getByReceiver(id).get();
+
+    }
+
     @PostMapping("setMsg")
     public Message setMessage(@RequestBody Message msg)  throws IOException {
         msgService.setMessage(msg);

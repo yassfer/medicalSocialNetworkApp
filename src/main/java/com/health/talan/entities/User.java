@@ -41,6 +41,7 @@ public class User implements Serializable {
 	@Column(name = "address")
 	private String address;
 
+	@JsonIgnore
 	@Lob
 	@Column(name = "image")
 	private byte[] image;

@@ -20,7 +20,7 @@ import com.health.talan.repositories.UserRepository;
 @Service
 public class ChallengeService implements IChallangeService {
 
-	ChallangeRepository challangeRepository;	
+	ChallangeRepository challangeRepository;
 	UserRepository userRepository;
 	AuthService authService;
 
@@ -32,23 +32,8 @@ public class ChallengeService implements IChallangeService {
 	}
 
 	@Override
-	public Long addChallenge(Challenge challange) {
-		challange.setAdminChallenge(authService.getCURRENTUSER());
-		challangeRepository.save(challange);
-		return challange.getId();
-	}
-
-	@Override
 	public void deleteChallange(Long id) {
 		challangeRepository.deleteChallengeById(id);
-	}
-
-	@Override
-	public void updateChallange(Long id, Challenge challange) {
-		Challenge oldChallange = challangeRepository.findById(id).get();
-		oldChallange.setNom(challange.getNom());
-		oldChallange.setObjectif(challange.getObjectif());
-		challangeRepository.save(oldChallange);
 	}
 
 	@Override
@@ -57,14 +42,21 @@ public class ChallengeService implements IChallangeService {
 	}
 
 	// uplaodImage
-	public void uplaodImage(String id, MultipartFile file) throws IOException {
-		long idChallenge = Long.parseLong(id);
-		System.out.println("Original Image Byte Size - " + file.getBytes().length);
-		Challenge challange = challangeRepository.findById(idChallenge).get();
-		challange.setPieceJoint(compressBytes(file.getBytes()));
-		challangeRepository.save(challange);
+	public Challenge uplaodImage(Long idUser, MultipartFile file) throws IOException {
+		User user = userRepository.findById(idUser).get();
+		Challenge challenge = new Challenge();
+		challenge.setAdminChallenge(user);
+		challenge.setPieceJoint(compressBytes(file.getBytes()));
+		challangeRepository.save(challenge);
+		return challenge;
 	}
 
+	public void saveChallenge(Long id, Challenge challenge) {
+		Challenge newC = challangeRepository.findById(id).get();
+		newC.setNom(challenge.getNom());
+		newC.setObjectif(challenge.getObjectif());
+		challangeRepository.save(newC);
+	}
 	// Display all
 	@Override
 	public List<Challenge> getAll() throws IOException {
@@ -77,8 +69,8 @@ public class ChallengeService implements IChallangeService {
 
 	// Display By Admin Challenge
 	@Override
-	public List<Challenge> getByAdmin() throws IOException {
-		User user = authService.getCURRENTUSER();
+	public List<Challenge> getByAdmin(Long id) throws IOException {
+		User user = userRepository.findById(id).get();
 		List<Challenge> challenges = (List<Challenge>) challangeRepository.findByAdminChallenge(user);
 		for (Challenge challenge : challenges) {
 			challenge.setPieceJoint(decompressBytes(challenge.getPieceJoint()));
