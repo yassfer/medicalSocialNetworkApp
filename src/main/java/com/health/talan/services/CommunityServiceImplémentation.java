@@ -1,9 +1,7 @@
 package com.health.talan.services;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -31,37 +29,47 @@ public class CommunityServiceImplémentation implements CommunityService {
 	@Autowired
 	private UserRepository UserRepository;
 
+
+	@Autowired
+	private AuthService authService;
+
+
+	@Autowired
+	public CommunityServiceImplémentation(CommunityRepository CommunityRepository, UserRepository userRepository,
+										  AuthService authService) {
+		this.CommunityRepository = CommunityRepository;
+		this.UserRepository = userRepository;
+		this.authService = authService;
+	}
+
 	@Override
 	public List<Community> GetAllCommunities() throws IOException {
 		List<Community> Communities = (List<Community>) CommunityRepository.findAll();
 		for (Community Community : Communities) {
-			if (Community.getImage() == null) {
-				File resource = new ClassPathResource("225120299_552547039090360_5548216445993623482_n.png").getFile();
-				byte[] file = Files.readAllBytes(resource.toPath());
-				System.out.println(file);
-				Community.setImage(file);
-			} else {
-				Community.setImage(decompressBytes(Community.getImage()));
-			}
+			Community.setImage(decompressBytes(Community.getImage()));
 
 		}
 		return Communities;
 	}
 
+	public Community addCommunityWithPiece(Long idAdmin, MultipartFile file) throws IOException {
+		Community Community = new Community();
+		User user = UserRepository.findById(idAdmin).get();
+		Community.setImage(compressBytes(file.getBytes()));
+		Community.setAdminCom(user);
+		CommunityRepository.save(Community);
+		return Community;
+	}
+
+
+
 	// get community by idadmin
-	public List<Community> getByAdmin(String idAdmin) throws IOException {
-		long id = Long.parseLong(idAdmin);
+	public List<Community> getByAdmin(Long id) throws IOException {
 		User user = UserRepository.findById(id).get();
 		List<Community> Communities = (List<Community>) CommunityRepository.findByAdminCommunity(user);
+
 		for (Community Community : Communities) {
-			if (Community.getImage() == null) {
-				File resource = new ClassPathResource("225120299_552547039090360_5548216445993623482_n.png").getFile();
-				byte[] file = Files.readAllBytes(resource.toPath());
-				System.out.println(file);
-				Community.setImage(file);
-			} else {
-				Community.setImage(decompressBytes(Community.getImage()));
-			}
+			Community.setImage(decompressBytes(Community.getImage()));
 		}
 		return Communities;
 	}
@@ -69,36 +77,26 @@ public class CommunityServiceImplémentation implements CommunityService {
 	// get by id
 	public Community getCommunityById(Long idCommunity) throws IOException {
 		Community Community = CommunityRepository.findById(idCommunity).get();
-		if (Community.getImage() == null) {
-			File resource = new ClassPathResource("225120299_552547039090360_5548216445993623482_n.png").getFile();
-			byte[] file = Files.readAllBytes(resource.toPath());
-			System.out.println(file);
-			Community.setImage(file);
-		} else {
-			Community.setImage(decompressBytes(Community.getImage()));
-
-		}
+		Community.setImage(decompressBytes(Community.getImage()));
 		return Community;
 	}
 
+
+
+
+
+
+
+
 	// get followed communties / user
-	public List<Community> getfollowedCommunity(Long iduser) throws IOException {
-		User user = UserRepository.findById(iduser).get();
+	public List<Community> getfollowedCommunity(Long id) throws IOException {
 		List<Community> followed = new ArrayList<>();
+		User user = UserRepository.findById(id).get();
 		Set<Community> communitiesparticipates = user.getCommunitiesParticipate();
 		for (Community community : communitiesparticipates) {
 			for (User participant : community.getParticipants()) {
-				if (user.equals(participant)) {
-					if (community.getImage() == null) {
-						File resource = new ClassPathResource("225120299_552547039090360_5548216445993623482_n.png")
-								.getFile();
-						byte[] file = Files.readAllBytes(resource.toPath());
-						System.out.println(file);
-						community.setImage(file);
-					} else {
-						community.setImage(decompressBytes(community.getImage()));
-					}
-
+				if (user.equals(participant)&& !(community.getAdminCom().equals(user))) {
+					community.setImage(decompressBytes(community.getImage()));
 					followed.add(community);
 				}
 			}
@@ -106,23 +104,15 @@ public class CommunityServiceImplémentation implements CommunityService {
 		return followed;
 	}
 
-	public List<Community> getUnfollowedCommunity(Long iduser) throws IOException {
-		User user = UserRepository.findById(iduser).get();
+	public List<Community> getUnfollowedCommunity(Long id) throws IOException {
 		List<Community> unfollowed = new ArrayList<>();
 		List<Community> Communities = (List<Community>) CommunityRepository.findAll();
+		User user = UserRepository.findById(id).get();;
 		Set<Community> communitiesparticipates = user.getCommunitiesParticipate();
 
 		for (Community community : Communities) {
 			if (!(communitiesparticipates.contains(community)) && !(community.getAdminCom().equals(user))) {
-				if (community.getImage() == null) {
-					File resource = new ClassPathResource("225120299_552547039090360_5548216445993623482_n.png")
-							.getFile();
-					byte[] file = Files.readAllBytes(resource.toPath());
-					System.out.println(file);
-					community.setImage(file);
-				} else {
-					community.setImage(decompressBytes(community.getImage()));
-				}
+				community.setImage(decompressBytes(community.getImage()));
 				unfollowed.add(community);
 			}
 		}
@@ -149,26 +139,24 @@ public class CommunityServiceImplémentation implements CommunityService {
 	}
 
 	// Add user to community
-	public Long AddUserToCommunity(Long idUser, Long idCommunity) {
+	public Long AddUserToCommunity(Long idCommunity, Long idUser) {
 		Community community = CommunityRepository.findById(idCommunity).get();
 		Set<User> communityparticipants = community.getParticipants();
 		System.out.println("*********");
-		communityparticipants.add(UserRepository.findById(idUser).get());
+		User user =  UserRepository.findById(idUser).get();
+		communityparticipants.add(user);
 		community.setParticipants(communityparticipants);
 		Community updatedCommunity = CommunityRepository.save(community);
 		return updatedCommunity.getId();
 	}
 
-	// User user= UserRepository.findById(idUser).orElseThrow(() -> new
-	// CommunityNotFoundException("User does not exist :"+idUser));
-	// community.getParticipants().add(user);
 
 	// Remove user from community
-	// Add user to community
-	public Long RemoveUserToCommunity(Long idUser, Long idCommunity) {
+	public Long RemoveUserToCommunity(Long idCommunity, Long idUser) {
 		Community community = CommunityRepository.findById(idCommunity).get();
 		Set<User> communityparticipants = community.getParticipants();
-		communityparticipants.remove(UserRepository.findById(idUser).get());
+		User user = UserRepository.findById(idUser).get();
+		communityparticipants.remove(user);
 		community.setParticipants(communityparticipants);
 		// CommunityRepository.findById(idCommunity).get().setParticipants(community.getParticipants());
 		Community updatedCommunity = CommunityRepository.save(community);
@@ -176,11 +164,21 @@ public class CommunityServiceImplémentation implements CommunityService {
 	}
 
 	// Add Community
-	public Long CreateCommunity(Long id, Community Community) {
+	/*public Long CreateCommunity(Long id, Community Community) {
 		User user = UserRepository.findById(id).get();
 		Community.setAdminCom(user);
 		CommunityRepository.save(Community);
 		return Community.getId();
+	}*/
+
+	// Save Community
+	public void saveCommunity(Long id, Community Community) {
+		Community CommunityN = CommunityRepository.findById(id).get();
+		CommunityN.setNom(Community.getNom());
+		CommunityN.setDescription(Community.getDescription());
+		CommunityN.setDomaine(Community.getDomaine());
+		CommunityN.setType(Community.getType());
+		CommunityRepository.save(CommunityN);
 	}
 
 	// upload image

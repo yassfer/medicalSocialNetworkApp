@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.MediaType;
 
 import com.health.talan.services.serviceInterfaces.CommunityService;
 
@@ -20,6 +21,8 @@ import com.health.talan.entities.*;
 import com.health.talan.repositories.*;
 
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import java.io.IOException;
 import java.util.*;
 
@@ -33,6 +36,7 @@ public class CommunityController {
 	@Autowired
 	private CommunityService CommunityService;
 
+	//@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("/getAll")
 	public List<Community> ViewCommunitiesPage() throws IOException {
 		return CommunityService.GetAllCommunities();
@@ -40,63 +44,84 @@ public class CommunityController {
 	}
 
 	// GET by ID
+	//@PreAuthorize("hasAuthority('USER')")
 	@GetMapping(path = "/getById/{id}")
 	public Community getCommunityById(@PathVariable Long id) throws IOException {
 		return CommunityService.getCommunityById(id);
 
 	}
 
-	@GetMapping(path = "/getFollowedCommunities/{iduser}")
-	List<Community> getfollowedCommunity(@PathVariable Long iduser) throws IOException {
-		return CommunityService.getfollowedCommunity(iduser);
+	//@PreAuthorize("hasAuthority('USER')")
+	@GetMapping(path = "/getFollowedCommunities/{id}")
+	List<Community> getfollowedCommunity(@PathVariable ("id") Long id) throws IOException {
+		return CommunityService.getfollowedCommunity(id);
 	}
 
-	@GetMapping(path = "/getUnFollowedCommunities/{iduser}")
-	List<Community> getUnfollowedCommunity(@PathVariable Long iduser) throws IOException {
-		return CommunityService.getUnfollowedCommunity(iduser);
+	//@PreAuthorize("hasAuthority('USER')")
+	@GetMapping(path = "/getUnFollowedCommunities/{id}")
+	List<Community> getUnfollowedCommunity(@PathVariable ("id") Long id) throws IOException {
+		return CommunityService.getUnfollowedCommunity(id);
 	}
 
+	//@PreAuthorize("hasAuthority('USER')")
 	@DeleteMapping("/delete/{idCommunity}")
 	public void deleteCommunity(@PathVariable Long idCommunity) {
 		CommunityService.deleteCommunity(idCommunity);
 	}
 
 	// UPDATE
+	//@PreAuthorize("hasAuthority('USER')")
 	@PutMapping("/update/{idCommunity}")
 	public Long UpdateCommunity(@PathVariable Long idCommunity, @RequestBody Community community) {
 		return CommunityService.UpdateCommunity(idCommunity, community);
 	}
 
 	// Add user in community
-	@GetMapping("/Adduser/{idUser}/{idCommunity}")
-	public Long AddUserToCommunity(@PathVariable Long idUser, @PathVariable Long idCommunity) {
+	//@PreAuthorize("hasAuthority('USER')")
+	@GetMapping("/Adduser/{idCommunity}/{idUser}")
+	public Long AddUserToCommunity(@PathVariable Long idCommunity, @PathVariable Long idUser) {
 
-		return CommunityService.AddUserToCommunity(idUser, idCommunity);
+		return CommunityService.AddUserToCommunity(idCommunity,idUser);
 		// System.out.println("User ajouté !");
 	}
 
 	// Remove user from community
-	@GetMapping("/Removeuser/{idUser}/{idCommunity}")
-	public Long RemoveUsertoCommunity(@PathVariable Long idUser, @PathVariable Long idCommunity) {
+	//@PreAuthorize("hasAuthority('USER')")
+	@GetMapping("/Removeuser/{idCommunity}/{idUser}")
+	public Long RemoveUsertoCommunity(@PathVariable Long idCommunity, @PathVariable Long idUser) {
 
-		return CommunityService.RemoveUserToCommunity(idUser, idCommunity);
+		return CommunityService.RemoveUserToCommunity(idCommunity,idUser);
 	}
 	// System.out.println("User ajouté !"); }
 
-	// Add community
-	@PostMapping("Create/{idUser}")
-	public Long CreateCommunity(@PathVariable Long idUser, @RequestBody Community Community) {
-		return CommunityService.CreateCommunity(idUser, Community);
+
+
+	//@PreAuthorize("hasAuthority('USER')")
+	@PostMapping(value="Create/{idUser}", consumes = { MediaType.APPLICATION_JSON_VALUE,
+			MediaType.MULTIPART_FORM_DATA_VALUE })
+	public Community CreateCommunity(@PathVariable Long idUser, @RequestParam("imageFile") MultipartFile file) throws Exception {
+		System.out.println(file);
+		return CommunityService.addCommunityWithPiece(idUser, file);
 		// System.out.println("Community créée !");
 
 	}
 
+
+	//@PreAuthorize("hasAuthority('USER')")
+	@PutMapping("save/{id}")
+	public void saveCommunity(@PathVariable("id") Long id, @RequestBody Community Community) {
+		CommunityService.saveCommunity(id, Community);
+	}
+
+	//@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("getByAdmin/{id}")
-	public List<Community> getByAdmin(@PathVariable String id) throws IOException {
+	public List<Community> getByAdmin(@PathVariable ("id") Long id) throws IOException {
+		System.out.println(id);
 		return CommunityService.getByAdmin(id);
 	}
 
 	// upload image
+	@PreAuthorize("hasAuthority('USER')")
 	@PutMapping(value = "/uploadImage/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
 	public void uplaodImage(@PathVariable("id") String id, @RequestParam("imageFile") MultipartFile file)

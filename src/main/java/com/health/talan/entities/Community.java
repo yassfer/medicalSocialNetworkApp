@@ -16,30 +16,30 @@ public class Community implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-	
+
 	@Column(name = "nom")
 	private String nom;
-	
+
 	@Column(name = "image")
 	private byte[] image;
-	
+
 	@Column(name = "domaine")
 	private String domaine;
-	
+
 	@Column(name="type")
-    private String type;
-	
+	private String type;
+
 	@Column(name="description")
 	private String description;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_adminCom")
 	private User adminCom;
 
 	@ManyToMany(cascade = {CascadeType.ALL})
 	@JoinTable(name="user_Participation_in_community",
-	joinColumns = @JoinColumn(name = "community_id"), 
-	inverseJoinColumns = @JoinColumn(name = "user_id"))
+			joinColumns = @JoinColumn(name = "community_id"),
+			inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<User> participants;
 
 	public Long getId() {
@@ -114,8 +114,8 @@ public class Community implements Serializable{
 		super();
 	}
 
-	
-	
+
+
 	@Override
 	public String toString() {
 		return "Community [id=" + id + ", nom=" + nom + ", image=" + Arrays.toString(image) + ", domaine=" + domaine
@@ -124,7 +124,7 @@ public class Community implements Serializable{
 	}
 
 	public Community(Long id, String nom, byte[] image, String domaine, String type, String description, User adminCom,
-			Set<User> participants) {
+					 Set<User> participants) {
 		super();
 		this.id = id;
 		this.nom = nom;
@@ -134,5 +134,5 @@ public class Community implements Serializable{
 		this.description = description;
 		this.adminCom = adminCom;
 		this.participants = participants;
-	}	
+	}
 }

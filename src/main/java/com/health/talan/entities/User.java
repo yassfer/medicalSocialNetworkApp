@@ -43,8 +43,8 @@ public class User implements Serializable {
 
 	@JsonIgnore
 	@Lob
-	@Column(name = "image")
-	private byte[] image;
+	@Column(name = "")
+	private byte[] logo;
 
 	@Column(name = "profession")
 	private String profession;

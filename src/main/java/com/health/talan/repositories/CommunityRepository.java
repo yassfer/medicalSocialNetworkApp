@@ -22,7 +22,7 @@ public interface CommunityRepository extends CrudRepository<Community, Long> {
 	@Query("DELETE from Community com where com.id= :id")
 	void deleteCommunityById(@Param("id") Long id);
 
-	
+
 	@Query("select c from Community c where c.adminCom = :user")
 	List<Community> findByAdminCommunity(@Param("user")User user);
 	

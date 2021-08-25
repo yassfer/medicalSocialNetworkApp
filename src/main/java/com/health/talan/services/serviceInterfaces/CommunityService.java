@@ -16,17 +16,30 @@ import com.health.talan.entities.User;
 
 public interface CommunityService {
 	List<Community> GetAllCommunities() throws IOException;
+
 	Community getCommunityById(@PathVariable Long idCommunity) throws IOException;
+
 	void deleteCommunity(@PathVariable Long idCommunity);
+
 	Long UpdateCommunity(Long idCommunity,Community community);
-	Long AddUserToCommunity(@PathVariable Long idUser, @PathVariable Long idCommunity);
-	public Long CreateCommunity(@PathVariable Long id ,@RequestBody Community Community) ;
-	List<Community> getByAdmin(String idAdmin) throws IOException;
+
+	Long AddUserToCommunity(@PathVariable Long idCommunity,@PathVariable Long idUser);
+
+	public void saveCommunity(Long id, Community Community);
+
+	List<Community> getByAdmin(Long id) throws IOException;
+
 	void uplaodImage(String id, MultipartFile file) throws IOException;
-	public Long RemoveUserToCommunity( Long idUser, Long idCommunity);
-	List<Community> getfollowedCommunity(Long iduser) throws IOException;
-	public List<Community> getUnfollowedCommunity(Long iduser) throws IOException;
-	
-	
+
+	public Long RemoveUserToCommunity(Long idCommunity, Long idUser);
+
+	List<Community> getfollowedCommunity(Long id) throws IOException;
+
+	public List<Community> getUnfollowedCommunity(Long id) throws IOException;
+
+	public Community addCommunityWithPiece(Long idAdmin, MultipartFile file) throws IOException ;
+
+
+
 
 }

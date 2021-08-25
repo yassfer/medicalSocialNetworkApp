@@ -6,12 +6,18 @@ import com.health.talan.repositories.UserRepository;
 import com.health.talan.services.serviceInterfaces.EntrepriseServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
 
+@RestController
+@CrossOrigin(origins = "http://localhost:4200/")
+@RequestMapping("entreprise/")
 public class EntrepriseController {
     @Autowired
     private EntrepriseServices entrepriseService;
@@ -45,38 +51,26 @@ public class EntrepriseController {
         }
     }
 
-	/*
+    @PreAuthorize("hasAuthority('USER')")
+    @PutMapping("save/{id}")
+    public void saveEntreprise(@PathVariable("id") Long id, @RequestBody Entreprise Entreprise) {
+        System.out.println(Entreprise);
+        entrepriseService.saveEntreprise(id, Entreprise);
+    }
 
 
-	@PreAuthorize("hasAuthority('USER')")
-	@PutMapping("save/{id}")
-	public void saveEntreprise(@PathVariable("id") Long id, @RequestBody Entreprise Entreprise) {
-		System.out.println(Entreprise);
-		entrepriseService.saveEntreprise(id, Entreprise);
-	}
+    @PreAuthorize("hasAuthority('USER')")
+    @PostMapping(value = "addEntreprise/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
+            MediaType.MULTIPART_FORM_DATA_VALUE })
+    public Entreprise addEntreprise(@PathVariable("id") Long id, @RequestParam("imageFile") MultipartFile file)
+            throws Exception {
+        return entrepriseService.addEntrepriseWithPiece(id,file);
+    }
 
 
-	@PreAuthorize("hasAuthority('USER')")
-	@PostMapping(value = "addEntreprise/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.MULTIPART_FORM_DATA_VALUE })
-	public Entreprise addEntreprise(@PathVariable("id") Long id, @RequestParam("imageFile") MultipartFile file)
-			throws Exception {
-		return entrepriseService.addEntrepriseWithPiece(id,file);
-	}
-
-
-	@PreAuthorize("hasAuthority('USER')")
-	@GetMapping("getAll")
-	public List<Entreprise> displayAll() throws IOException {
-		return entrepriseService.getAll();
-	}
-
-	@PreAuthorize("hasAuthority('USER')")
-	@GetMapping("getMyEntreprise")
-	public Entreprise displayByAdmin() throws IOException {
-		return entrepriseService.getByAdmin();
-	}
-
-
-	*/
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("getMyEntreprise")
+    public Entreprise displayByAdmin() throws IOException {
+        return entrepriseService.getByAdmin();
+    }
 }
