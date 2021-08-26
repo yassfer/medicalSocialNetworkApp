@@ -23,4 +23,6 @@ public interface InvitationRepository extends JpaRepository<Invitation, Long> {
     @Modifying
     @Query("DELETE from Invitation i where i.id = :id")
     void deleteById(@Param("id")Long id);
+
+    List<Invitation> findBySender(User user);
 }

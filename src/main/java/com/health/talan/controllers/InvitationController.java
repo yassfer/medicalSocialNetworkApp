@@ -47,5 +47,12 @@ public class InvitationController {
     public void AcceptInvitation (@PathVariable Long userId, @PathVariable Long inviId ) {
         this.invitationService.acceptInvitation(userId, inviId);
     }
+
+    @GetMapping("getBySender/{id}")
+    public List<Invitation> getAllBySender(@PathVariable Long id){
+        return invitationService.getAllBySender(id);
+    }
 }
+
+
 

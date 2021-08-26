@@ -23,7 +23,7 @@ public class InvitationService {
 
     public Optional<List<Invitation>> getAllInvitations(Long userId) {
         User user = this.userRepository.findById(userId).get();
-         Optional<List<Invitation>> invitations = invitationRepository.findByReceiver(user);
+        Optional<List<Invitation>> invitations = invitationRepository.findByReceiver(user);
 
         Date toDay = new Date(System.currentTimeMillis());
         for (Invitation invitation : invitations.get()) {
@@ -68,6 +68,8 @@ public class InvitationService {
         User receiver = userRepository.findById(receiverId).get();
         invi.setSender(sender);
         invi.setReceiver(receiver);
+        invi.setDate(new Date(System.currentTimeMillis()));
+        invi.setTime(new Date(System.currentTimeMillis()));
         invitationRepository.save(invi);
     }
 
@@ -75,7 +77,10 @@ public class InvitationService {
         User user = this.userRepository.findById(userId).get();
         Invitation invi = invitationRepository.findById(inviId).get();
         User sender = invi.getSender();
-        System.out.println(sender.getId());
+        User user2 = userRepository.findById(invi.getReceiver().getId()).get();
+        Set<User> friends2 = user2.getFriends();
+        friends2.add(user);
+        userRepository.save(user2);
         Set<User> friends = user.getFriends();
         friends.add(sender);
         user.setFriends(friends);
@@ -83,12 +88,9 @@ public class InvitationService {
         invitationRepository.deleteById(inviId);
     }
 
-   /* public void AcceptInvitation (Long userId, Invitation invi) {
-        User user = this.userRepository.findById(userId).get();
-        User sender = invi.getSender();
-        Amis senderAmis = new Amis();
-        senderAmis.setMyFriend(sender);
-        user.getAmis().add(senderAmis);
-        userRepository.save(user);
-    }*/
+    public List<Invitation> getAllBySender(Long id){
+        User user = userRepository.findById(id).get();
+        return invitationRepository.findBySender(user);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.health.talan.services;
 
+import com.health.talan.entities.PublicationChallenge;
 import com.health.talan.repositories.PieceJointRepo;
 import com.health.talan.entities.PieceJoint;
 import com.health.talan.entities.Publication;
@@ -19,6 +20,7 @@ public class PieceJointServiceImpl implements PieceJointService {
 
     private PieceJointRepo pieceJointRepo;
     private PublicationServiceImpl publicationServiceImpl;
+    private PublicationChallengeServiceImpl publicationChallengeServiceImpl;
     private ChallengeService challengeService;
 
     @Autowired
@@ -53,6 +55,14 @@ public class PieceJointServiceImpl implements PieceJointService {
     public PieceJoint updatePieceJoint(PieceJoint pieceJoint, Long pubId){
         Optional<Publication> pub = publicationServiceImpl.getPublicationById(pubId);
         pieceJoint.setPublication(pub.get());
+        //pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
+        return pieceJointRepo.save(pieceJoint);
+    }
+
+    @Override
+    public PieceJoint updatePieceJointChallenge(PieceJoint pieceJoint, Long pubChallengeId){
+        Optional<PublicationChallenge> pubChallenge = publicationChallengeServiceImpl.getPublicationChallengeById(pubChallengeId);
+        pieceJoint.setPublicationChallenge(pubChallenge.get());
         //pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
         return pieceJointRepo.save(pieceJoint);
     }

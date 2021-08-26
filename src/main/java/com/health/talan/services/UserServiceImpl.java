@@ -29,16 +29,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         List<User> users = (List<User>) userRepo.findAll();
-        for (User user : users) {
-            user.setImage(challengeService.decompressBytes(user.getImage()));
-        }
         return users;
     }
 
     @Override
     public Optional<User> getUserById(Long id) {
         Optional<User> user = userRepo.findById(id);
-        user.get().setImage(challengeService.decompressBytes(user.get().getImage()));
+        //user.get().setImage(challengeService.decompressBytes(user.get().getImage()));
         return Optional.ofNullable(user.orElse(null));
     }
 
@@ -56,7 +53,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByUsername(String username) {
         User user = userRepo.findByUsername(username).get();
-        user.setImage(challengeService.decompressBytes(user.getImage()));
+        //user.setImage(challengeService.decompressBytes(user.getImage()));
         return user;
     }
 
@@ -93,16 +90,13 @@ public class UserServiceImpl implements UserService {
     public Set<User> getMyFiends(Long id) {
         User user = userRepo.findById(id).get();
         Set<User> friends = user.getFriends();
-        for (User user2 : friends) {
-            user2.setImage(challengeService.decompressBytes(user2.getImage()));
-        }
         return friends;
     }
 
     @Override
     public void updateUserImage(Long id, MultipartFile file) throws IOException {
         User user = userRepo.findById(id).get();
-        user.setImage(challengeService.compressBytes(file.getBytes()));
+        user.setLogo(challengeService.compressBytes(file.getBytes()));
         userRepo.save(user);
     }
 
@@ -127,5 +121,14 @@ public class UserServiceImpl implements UserService {
         return new ResponseEntity<>(new ResponseMessage("User updated successfully !"),
                 HttpStatus.OK);
     }
+
+    @Override
+    public User updateScore(long idu, int score) {
+        User user = userRepo.findById(idu).get();
+        user.setScore(score);
+        userRepo.save(user);
+        return user;
+    }
+
 
 }

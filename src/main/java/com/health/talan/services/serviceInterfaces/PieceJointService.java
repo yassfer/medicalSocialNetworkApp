@@ -24,5 +24,7 @@ public interface PieceJointService {
 
     public PieceJoint updatePieceJoint2(PieceJoint pieceJoint);
 
+    public PieceJoint updatePieceJointChallenge(PieceJoint pieceJoint, Long pubChallengeId);
+
 
 }

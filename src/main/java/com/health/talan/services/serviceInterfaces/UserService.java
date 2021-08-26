@@ -33,4 +33,6 @@ public interface UserService {
     public void updateUserImage(Long id, MultipartFile file) throws IOException;
 
     public ResponseEntity<?> updateUserProfile(Long id, User user);
+
+    public User updateScore(long idu, int score);
 }

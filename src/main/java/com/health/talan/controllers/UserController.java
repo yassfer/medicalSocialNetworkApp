@@ -95,4 +95,12 @@ public class UserController {
 		return userServiceImpl.updateUserProfile(id, user);
 	}
 
+    @GetMapping("score/{idu}/{score}")
+    public ResponseEntity<?> updateScore(@PathVariable("idu") Long id, @PathVariable("score") int score) {
+        User user=userServiceImpl.updateScore(id, score);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+
+
+    }
+
 }

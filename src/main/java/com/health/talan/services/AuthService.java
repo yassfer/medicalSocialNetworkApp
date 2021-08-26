@@ -114,7 +114,7 @@ public class AuthService {
         user.setConnected(false);
         File resource = new ClassPathResource("user-profile.jpg").getFile();
         byte[] file = Files.readAllBytes(resource.toPath());
-        user.setImage(challengeService.compressBytes(file));
+        user.setLogo(challengeService.compressBytes(file));
         Optional<User> recommendedBy = Optional.ofNullable(userRepository.findByUsername(signUpRequest.getRecommander())).orElse(null);
         if(recommendedBy.isPresent()==true) {
             user.setRecommander(recommendedBy.get());

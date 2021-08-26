@@ -2,21 +2,11 @@ package com.health.talan.entities;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -37,6 +27,11 @@ public class Challenge implements Serializable {
 	@Column(name = "pieceJoint", nullable = true)
 	@Lob
 	private byte[] pieceJoint;
+
+	@Temporal(TemporalType.DATE)
+	@Column(name= "createdAt")
+	private Date createdAt;
+
 	@ManyToOne
 	@JoinColumn(name = "id_adminChallenge")
 	private User adminChallenge;
@@ -76,6 +71,14 @@ public class Challenge implements Serializable {
 		return pieceJoint;
 	}
 
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
 	public void setPieceJoint(byte[] pieceJoint) {
 		this.pieceJoint = pieceJoint;
 	}
@@ -98,12 +101,14 @@ public class Challenge implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Challenge [id=" + id + ", nom=" + nom + ", objectif=" + objectif + ", pieceJoint="
-				+ Arrays.toString(pieceJoint) + ", adminChallenge=" + adminChallenge + ", PublicationChallenge="
-				+ PublicationChallenge + "]";
+		return "Challenge{" +
+				"id=" + id +
+				", nom='" + nom + '\'' +
+				", objectif='" + objectif + '\'' +
+				", pieceJoint=" + Arrays.toString(pieceJoint) +
+				", createdAt=" + createdAt +
+				", adminChallenge=" + adminChallenge +
+				", PublicationChallenge=" + PublicationChallenge +
+				'}';
 	}
-
-
-
-
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.health.talan.entities.Message;
 import com.health.talan.repositories.MessageRepository;
-import com.health.talan.services.MessageService;
+import com.health.talan.services.serviceInterfaces.MessageService;
 
 @Service
 public class MessageServiceImpl implements MessageService {

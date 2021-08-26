@@ -41,9 +41,8 @@ public class User implements Serializable {
 	@Column(name = "address")
 	private String address;
 
-	@JsonIgnore
 	@Lob
-	@Column(name = "")
+	@Column(name = "logo")
 	private byte[] logo;
 
 	@Column(name = "profession")
@@ -218,12 +217,12 @@ public class User implements Serializable {
 		this.address = address;
 	}
 
-	public byte[] getImage() {
-		return image;
+	public byte[] getLogo() {
+		return logo;
 	}
 
-	public void setImage(byte[] image) {
-		this.image = image;
+	public void setLogo(byte[] logo) {
+		this.logo = logo;
 	}
 
 	public String getProfession() {
@@ -413,7 +412,7 @@ public class User implements Serializable {
 				", password='" + password + '\'' +
 				", birthDate=" + birthDate +
 				", address='" + address + '\'' +
-				", image=" + Arrays.toString(image) +
+				", logo=" + Arrays.toString(logo) +
 				", profession='" + profession + '\'' +
 				", professionnalisme=" + professionnalisme +
 				", recommander=" + recommander +

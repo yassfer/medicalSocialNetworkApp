@@ -2,6 +2,7 @@ package com.health.talan.services;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
@@ -55,6 +56,7 @@ public class ChallengeService implements IChallangeService {
 		Challenge newC = challangeRepository.findById(id).get();
 		newC.setNom(challenge.getNom());
 		newC.setObjectif(challenge.getObjectif());
+		newC.setCreatedAt(new Date(System.currentTimeMillis()));
 		challangeRepository.save(newC);
 	}
 	// Display all
@@ -116,5 +118,4 @@ public class ChallengeService implements IChallangeService {
 		}
 		return outputStream.toByteArray();
 	}
-
 }

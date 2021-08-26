@@ -1,6 +1,6 @@
 package com.health.talan.controllers;
 
-import com.health.talan.services.MessageService;
+import com.health.talan.services.serviceInterfaces.MessageService;
 import com.health.talan.entities.Message;
 
 import java.io.IOException;

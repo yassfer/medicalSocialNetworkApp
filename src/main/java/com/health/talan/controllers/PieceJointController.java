@@ -192,6 +192,22 @@ public class PieceJointController {
         return new ResponseEntity<>("update done successfully", HttpStatus.OK);
     }
 
+
+    @PatchMapping("/publicationChallenge/{publicationChallengeId}")
+    public ResponseEntity<?> updatePublicationChallenge(@PathVariable("publicationChallengeId") Long publicationChallengeId, @RequestBody PieceJoint[] pieceJoints) {
+        for(PieceJoint pieceJoint : pieceJoints){
+            Optional<PieceJoint> updatedPieceJoint = pieceJointServiceImpl.getPieceJoint(pieceJoint.getId());
+            if (updatedPieceJoint.isPresent()) {
+                pieceJointServiceImpl.updatePieceJointChallenge(updatedPieceJoint.get(), publicationChallengeId);
+            }
+            else {
+                return new ResponseEntity<>("update failed", HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        return new ResponseEntity<>("update done successfully", HttpStatus.OK);
+    }
+
 }
 
 
