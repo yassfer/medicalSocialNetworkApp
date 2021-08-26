@@ -23,4 +23,7 @@ public interface ChallangeRepository extends CrudRepository<Challenge, Long>{
 	void deleteChallengeById(@Param("id") Long id);
 	@Query("select c from Challenge c where c.adminChallenge = :user")
 	List<Challenge> findByAdminChallenge(@Param("user")User user);
+	
+	@Query("select c from Challenge c ORDER BY c.createdAt DESC")
+	List<Challenge> getAllByDate();
 }

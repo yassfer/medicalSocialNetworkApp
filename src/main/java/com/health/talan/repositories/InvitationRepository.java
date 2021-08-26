@@ -25,4 +25,7 @@ public interface InvitationRepository extends JpaRepository<Invitation, Long> {
     void deleteById(@Param("id")Long id);
 
     List<Invitation> findBySender(User user);
+    
+    @Query("select i from Invitation i where i.sender = :sender and i.receiver= :receiver")
+    Invitation findInvitation(@Param("sender") User Sender, @Param("receiver") User Receiver);
 }

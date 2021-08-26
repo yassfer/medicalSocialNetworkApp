@@ -4,6 +4,7 @@ import com.health.talan.repositories.CommentRepo;
 import com.health.talan.repositories.LikingRepo;
 import com.health.talan.repositories.PieceJointRepo;
 import com.health.talan.repositories.PublicationRepo;
+import com.health.talan.entities.Challenge;
 import com.health.talan.entities.Publication;
 import com.health.talan.entities.User;
 import com.health.talan.services.serviceInterfaces.PublicationService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class PublicationServiceImpl implements PublicationService {
@@ -89,4 +91,8 @@ public class PublicationServiceImpl implements PublicationService {
         }
     }
 
+    public Set<Publication> getAllByDate(){
+
+        return publicationRepo.getAllByDate();
+    }
 }

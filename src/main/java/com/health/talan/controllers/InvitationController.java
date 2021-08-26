@@ -39,13 +39,18 @@ public class InvitationController {
     public void DeleteInvitation (@PathVariable Long idInvitation) {
         this.invitationService.deleteInvitation(idInvitation);
     }
-    @PostMapping("add/{senderId}/{receiverId}")
+    @GetMapping("add/{senderId}/{receiverId}")
     public void addInvitation(@PathVariable Long senderId, @PathVariable Long receiverId) {
         this.invitationService.addInvitation(senderId, receiverId);
     }
     @GetMapping("accept/{userId}/{inviId}")
     public void AcceptInvitation (@PathVariable Long userId, @PathVariable Long inviId ) {
         this.invitationService.acceptInvitation(userId, inviId);
+    }
+    
+    @GetMapping("acceptUser/{idSender}/{idReceiver}")
+    public void AcceptUser (@PathVariable Long idSender, @PathVariable Long idReceiver ) {
+        this.invitationService.acceptInvitation(idSender, idReceiver);
     }
 
     @GetMapping("getBySender/{id}")

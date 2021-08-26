@@ -68,7 +68,9 @@ public class InvitationService {
         User receiver = userRepository.findById(receiverId).get();
         invi.setSender(sender);
         invi.setReceiver(receiver);
+        System.out.println(System.currentTimeMillis());
         invi.setDate(new Date(System.currentTimeMillis()));
+        System.out.println(invi.getDate());
         invi.setTime(new Date(System.currentTimeMillis()));
         invitationRepository.save(invi);
     }
@@ -86,6 +88,23 @@ public class InvitationService {
         user.setFriends(friends);
         userRepository.save(user);
         invitationRepository.deleteById(inviId);
+    }
+    
+    public void acceptInvitationByUser (Long idSender, Long idReceiver) {
+        User sender = this.userRepository.findById(idSender).get();
+        User receiver = this.userRepository.findById(idReceiver).get();
+        
+        Invitation invi = invitationRepository.findInvitation(sender, receiver);
+        Set<User> friendsS = sender.getFriends();
+        friendsS.add(receiver);
+        sender.setFriends(friendsS);
+        Set<User> friendsR = receiver.getFriends();
+        friendsR.add(sender);
+        receiver.setFriends(friendsR);
+        
+        userRepository.save(sender);
+        userRepository.save(receiver);
+        invitationRepository.deleteById(invi.getId());
     }
 
     public List<Invitation> getAllBySender(Long id){

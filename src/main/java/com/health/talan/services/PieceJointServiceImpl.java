@@ -18,79 +18,81 @@ import java.util.stream.Stream;
 @Service
 public class PieceJointServiceImpl implements PieceJointService {
 
-    private PieceJointRepo pieceJointRepo;
-    private PublicationServiceImpl publicationServiceImpl;
-    private PublicationChallengeServiceImpl publicationChallengeServiceImpl;
-    private ChallengeService challengeService;
+	 private PieceJointRepo pieceJointRepo;
+	    private PublicationServiceImpl publicationServiceImpl;
+	    private PublicationChallengeServiceImpl publicationChallengeServiceImpl;
+	    private ChallengeService challengeService;
 
-    @Autowired
-    public PieceJointServiceImpl(PieceJointRepo pieceJointRepo, PublicationServiceImpl publicationServiceImpl,
-                                 ChallengeService challengeService){
-        this.pieceJointRepo = pieceJointRepo;
-        this.publicationServiceImpl = publicationServiceImpl;
-        this.challengeService= challengeService;
-    }
-
-
-    @Override
-    public PieceJoint store(MultipartFile pieceJoint, Long publicationId) throws IOException {
-        String PieceJointName = StringUtils.cleanPath(pieceJoint.getOriginalFilename());
-        PieceJoint pieceJoint1 = new PieceJoint(PieceJointName, pieceJoint.getContentType(),
-                challengeService.compressBytes(pieceJoint.getBytes()), (int) pieceJoint.getSize());
-        Optional<Publication> pub = publicationServiceImpl.getPublicationById(publicationId);
-        pieceJoint1.setPublication(pub.get());
-
-        return pieceJointRepo.save(pieceJoint1);
-    }
-
-    @Override
-    public PieceJoint store2(MultipartFile pieceJoint) throws IOException {
-        String PieceJointName = StringUtils.cleanPath(pieceJoint.getOriginalFilename());
-        PieceJoint pieceJoint1 = new PieceJoint(PieceJointName, pieceJoint.getContentType(),
-                challengeService.compressBytes(pieceJoint.getBytes()), (int) pieceJoint.getSize());
-        return pieceJointRepo.save(pieceJoint1);
-    }
-
-    @Override
-    public PieceJoint updatePieceJoint(PieceJoint pieceJoint, Long pubId){
-        Optional<Publication> pub = publicationServiceImpl.getPublicationById(pubId);
-        pieceJoint.setPublication(pub.get());
-        //pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
-        return pieceJointRepo.save(pieceJoint);
-    }
-
-    @Override
-    public PieceJoint updatePieceJointChallenge(PieceJoint pieceJoint, Long pubChallengeId){
-        Optional<PublicationChallenge> pubChallenge = publicationChallengeServiceImpl.getPublicationChallengeById(pubChallengeId);
-        pieceJoint.setPublicationChallenge(pubChallenge.get());
-        //pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
-        return pieceJointRepo.save(pieceJoint);
-    }
-
-    @Override
-    public PieceJoint updatePieceJoint2(PieceJoint pieceJoint){
-        //pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
-        return pieceJointRepo.save(pieceJoint);
-    }
+	    @Autowired
+	    public PieceJointServiceImpl(PieceJointRepo pieceJointRepo, PublicationServiceImpl publicationServiceImpl,
+	                                 ChallengeService challengeService){
+	        this.pieceJointRepo = pieceJointRepo;
+	        this.publicationServiceImpl = publicationServiceImpl;
+	        this.challengeService= challengeService;
+	    }
 
 
+	    @Override
+	    public PieceJoint store(MultipartFile pieceJoint, Long publicationId) throws IOException {
+	        String PieceJointName = StringUtils.cleanPath(pieceJoint.getOriginalFilename());
+	        PieceJoint pieceJoint1 = new PieceJoint(PieceJointName, pieceJoint.getContentType(),
+	                challengeService.compressBytes(pieceJoint.getBytes()), (int) pieceJoint.getSize());
+	        Optional<Publication> pub = publicationServiceImpl.getPublicationById(publicationId);
+	        pieceJoint1.setPublication(pub.get());
 
-    @Override
-    public Optional<PieceJoint> getPieceJoint(Long id) {
-        Optional<PieceJoint> pieceJoint = Optional.ofNullable(pieceJointRepo.findById(id)).orElse(null);
-        //pieceJoint.get().setData(challengeService.decompressBytes(pieceJoint.get().getData()));
-        return pieceJoint;
-    }
+	        return pieceJointRepo.save(pieceJoint1);
+	    }
+
+	    @Override
+	    public PieceJoint store2(MultipartFile pieceJoint) throws IOException {
+	        String PieceJointName = StringUtils.cleanPath(pieceJoint.getOriginalFilename());
+	        PieceJoint pieceJoint1 = new PieceJoint(PieceJointName, pieceJoint.getContentType(),
+	                challengeService.compressBytes(pieceJoint.getBytes()), (int) pieceJoint.getSize());
+	        return pieceJointRepo.save(pieceJoint1);
+	    }
+
+	    @Override
+	    public PieceJoint updatePieceJoint(PieceJoint pieceJoint, Long pubId){
+	        Optional<Publication> pub = publicationServiceImpl.getPublicationById(pubId);
+	        pieceJoint.setPublication(pub.get());
+	        //pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
+	        return pieceJointRepo.save(pieceJoint);
+	    }
+
+	    @Override
+	    public PieceJoint updatePieceJointChallenge(PieceJoint pieceJoint, Long pubChallengeId){
+	        Optional<PublicationChallenge> pubChallenge = publicationChallengeServiceImpl.getPublicationChallengeById(pubChallengeId);
+	        System.out.println(pubChallenge.get().getId());
+	        System.out.println(pieceJoint.getId());
+	        pieceJoint.setPublicationChallenge(pubChallenge.get());
+	        //pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
+	        return pieceJointRepo.save(pieceJoint);
+	    }
+
+	    @Override
+	    public PieceJoint updatePieceJoint2(PieceJoint pieceJoint){
+	        //pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
+	        return pieceJointRepo.save(pieceJoint);
+	    }
 
 
-    @Override
-    public Stream<PieceJoint> getAllPieceJoints() {
-        return pieceJointRepo.findAll().stream();
-    }
 
-    @Override
-    public Optional<List<PieceJoint>> getAllPieceJointsByPubId(Long publicationId){
-        return pieceJointRepo.findByPublicationId(publicationId);
-    }
+	    @Override
+	    public Optional<PieceJoint> getPieceJoint(Long id) {
+	        Optional<PieceJoint> pieceJoint = Optional.ofNullable(pieceJointRepo.findById(id)).orElse(null);
+	        //pieceJoint.get().setData(challengeService.decompressBytes(pieceJoint.get().getData()));
+	        return pieceJoint;
+	    }
 
-}
+
+	    @Override
+	    public Stream<PieceJoint> getAllPieceJoints() {
+	        return pieceJointRepo.findAll().stream();
+	    }
+
+	    @Override
+	    public Optional<List<PieceJoint>> getAllPieceJointsByPubId(Long publicationId){
+	        return pieceJointRepo.findByPublicationId(publicationId);
+	    }
+
+	}

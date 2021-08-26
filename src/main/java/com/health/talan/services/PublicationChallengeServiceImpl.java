@@ -173,6 +173,8 @@ public class PublicationChallengeServiceImpl implements PublicationChallengeServ
         }
     }
 
-
+    public List<PublicationChallenge> getAllByDate(){
+		return publicationChallengeRepo.getAllByDate();
+	}
 
 }

@@ -174,4 +174,9 @@ public class PublicationChallengeController {
         Optional<List<PublicationChallenge>> pub = publicationChallengeServiceImpl.getPublicationChallengeByApprouved(false,challengePublicationId);
         return new ResponseEntity<>(pub, HttpStatus.OK);
     }
+	
+	@GetMapping("/getAllByDate")
+	public List<PublicationChallenge> getAllByDate(){
+		return publicationChallengeServiceImpl.getAllByDate();
+	}
 }

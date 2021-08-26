@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
+import javax.xml.ws.ResponseWrapper;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @Controller
@@ -92,5 +95,19 @@ public class PublicationController {
 		} else {
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	@GetMapping("/getAllByDate")
+	@ResponseBody
+	public Set<Publication> getAllPublicationsByData() {
+
+		Set<Publication> publications = publicationServiceImpl.getAllByDate();
+		
+			for (Publication publication : publications) {
+				for (PieceJoint pieceJoint : publication.getPieceJoints()) {
+					pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
+				}
+			}
+			return publications;
 	}
 }

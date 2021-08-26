@@ -32,7 +32,7 @@ public class PublicationChallenge implements Serializable {
 
 
 	@JsonIgnoreProperties(value = {"publicationChallenge", "handler","hibernateLazyInitializer"}, allowSetters = true)
-	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "publicationChallenge")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "publicationChallenge")
 	@Column(name = "pieceJoint")
 	private Set<PieceJoint> pieceJoints = new HashSet<>();
 

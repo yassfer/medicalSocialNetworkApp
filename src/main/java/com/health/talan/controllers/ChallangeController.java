@@ -70,4 +70,9 @@ public class ChallangeController {
 	public Challenge displayById(@PathVariable Long id) {
 		return challangeService.displayById(id);
 	}
+	
+	@GetMapping("getAllByDate")
+	public List<Challenge> getAllByDate() throws IOException{
+		return challangeService.getAllByDate();
+	}
 }

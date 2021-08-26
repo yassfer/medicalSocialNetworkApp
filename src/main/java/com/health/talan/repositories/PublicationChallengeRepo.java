@@ -1,5 +1,6 @@
 package com.health.talan.repositories;
 
+import com.health.talan.entities.Publication;
 import com.health.talan.entities.PublicationChallenge;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,4 +31,6 @@ public interface PublicationChallengeRepo extends JpaRepository<PublicationChall
     @Query("SELECT p FROM PublicationChallenge p WHERE p.user.id = ?1 AND p.challenge.id = ?2")
     Optional<PublicationChallenge> findByChallengeAndUser(Long UserId, Long challengeId);
 
+    @Query("select p from PublicationChallenge p ORDER BY p.dateCreation DESC")
+	List<PublicationChallenge> getAllByDate();
 }

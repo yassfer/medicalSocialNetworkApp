@@ -26,7 +26,8 @@ public class ChallengeService implements IChallangeService {
 	AuthService authService;
 
 	@Autowired
-	public ChallengeService(ChallangeRepository challangeRepository, UserRepository userRepository, AuthService authService) {
+	public ChallengeService(ChallangeRepository challangeRepository, UserRepository userRepository,
+			AuthService authService) {
 		this.challangeRepository = challangeRepository;
 		this.userRepository = userRepository;
 		this.authService = authService;
@@ -59,6 +60,7 @@ public class ChallengeService implements IChallangeService {
 		newC.setCreatedAt(new Date(System.currentTimeMillis()));
 		challangeRepository.save(newC);
 	}
+
 	// Display all
 	@Override
 	public List<Challenge> getAll() throws IOException {
@@ -117,5 +119,18 @@ public class ChallengeService implements IChallangeService {
 		} catch (DataFormatException e) {
 		}
 		return outputStream.toByteArray();
+	}
+
+	/*
+	 * public List<Challenge> getAllByDate(){ return
+	 * challangeRepository.getAllByDate(); }
+	 */
+
+	public List<Challenge> getAllByDate() throws IOException {
+		List<Challenge> challenges = (List<Challenge>) challangeRepository.getAllByDate();
+		for (Challenge challenge : challenges) {
+			challenge.setPieceJoint(decompressBytes(challenge.getPieceJoint()));
+		}
+		return challenges;
 	}
 }
