@@ -11,7 +11,7 @@ public interface PublicationService {
 
     public Optional<Publication> getPublicationById(Long id);
 
-    public Optional<List<Publication>> getPublicationByUserId(Long userId);
+    public List<Publication> getPublicationByUserId(Long userId);
 
     public Publication publishPublication(Publication publication, Long userId);
 

@@ -2,9 +2,11 @@ package com.health.talan.repositories;
 
 import com.health.talan.entities.Challenge;
 import com.health.talan.entities.Publication;
+import com.health.talan.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,5 +28,8 @@ public interface PublicationRepo extends JpaRepository<Publication, Long> {
     
     @Query("select p from Publication p ORDER BY p.dateCreation DESC")
 	Set<Publication> getAllByDate();
+
+    @Query("select p from Publication p where p.user= :user ORDER BY p.dateCreation DESC")
+    List<Publication> getByUserByDate(@Param("user") User user);
 }
 

@@ -24,4 +24,9 @@ public interface LikingRepo extends JpaRepository<Liking, Long> {
     @Modifying
     @Query("DELETE from Liking l where l.publicationChallenge.id = ?1")
     void deleteByPublicationChallengeId(Long id);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE from Liking l where l.publicationCommunity.id = ?1")
+    void deleteByPublicationCommunityId(Long id);
 }

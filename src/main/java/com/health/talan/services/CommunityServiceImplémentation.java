@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
@@ -11,7 +12,6 @@ import java.util.zip.Inflater;
 
 import com.health.talan.services.serviceInterfaces.CommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,21 +25,18 @@ public class CommunityServiceImplémentation implements CommunityService {
 
 	@Autowired
 	private CommunityRepository CommunityRepository;
-
-	@Autowired
+	private PublicationCommunityRepo publicationCommunityRepo;
 	private UserRepository UserRepository;
-
-
-	@Autowired
 	private AuthService authService;
 
 
 	@Autowired
-	public CommunityServiceImplémentation(CommunityRepository CommunityRepository, UserRepository userRepository,
+	public CommunityServiceImplémentation(PublicationCommunityRepo publicationCommunityRepo, CommunityRepository CommunityRepository, UserRepository userRepository,
 										  AuthService authService) {
 		this.CommunityRepository = CommunityRepository;
 		this.UserRepository = userRepository;
 		this.authService = authService;
+		this.publicationCommunityRepo = publicationCommunityRepo;
 	}
 
 	@Override
@@ -123,6 +120,8 @@ public class CommunityServiceImplémentation implements CommunityService {
 
 	// DELETE
 	public void deleteCommunity(Long idCommunity) {
+		Optional<Community> community = CommunityRepository.findById(idCommunity);
+		publicationCommunityRepo.deleteByCommunityId(community.get().getId());
 		CommunityRepository.deleteCommunityById(idCommunity);
 	}
 

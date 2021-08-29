@@ -36,12 +36,12 @@ public class PieceJointController {
     }
 
 
-    @PostMapping(value= "/upload/publication/{publicationId}", consumes = { MediaType.APPLICATION_JSON_VALUE,
+    @PostMapping(value= "/upload/user/{userEmail}", consumes = { MediaType.APPLICATION_JSON_VALUE,
             MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<?> uploadPieceJoint(@RequestParam("pieceJoint") MultipartFile pieceJoint, @PathVariable("publicationId")Long publicationId) {
+    public ResponseEntity<?> uploadPieceJustif(@RequestParam("pieceJustif") MultipartFile pieceJoint, @PathVariable("userEmail")String userEmail) {
 
         try {
-            PieceJoint pieceJoint1 = pieceJointServiceImpl.store(pieceJoint, publicationId);
+            PieceJoint pieceJoint1 = pieceJointServiceImpl.storePieceJustif(pieceJoint, userEmail);
             String pieceJointDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
                     .path("/api/pieceJoint/")
@@ -49,7 +49,7 @@ public class PieceJointController {
                     .toUriString();
             pieceJoint1.setUrl(pieceJointDownloadUri);
 
-            pieceJointServiceImpl.updatePieceJoint(pieceJoint1, publicationId);
+            pieceJointServiceImpl.updatePieceJoint2(pieceJoint1);
             return ResponseEntity.ok().body(pieceJoint1);
 
         } catch (Exception e) {
@@ -177,6 +177,8 @@ public class PieceJointController {
                 .body(pieceJoint1.getData());*/
     }
 
+    
+
     @PatchMapping("/publication/{publicationId}")
     public ResponseEntity<?> updatePublication(@PathVariable("publicationId") Long publicationId, @RequestBody PieceJoint[] pieceJoints) {
         for(PieceJoint pieceJoint : pieceJoints){
@@ -199,6 +201,22 @@ public class PieceJointController {
             Optional<PieceJoint> updatedPieceJoint = pieceJointServiceImpl.getPieceJoint(pieceJoint.getId());
             if (updatedPieceJoint.isPresent()) {
                 pieceJointServiceImpl.updatePieceJointChallenge(updatedPieceJoint.get(), publicationChallengeId);
+            }
+            else {
+                return new ResponseEntity<>("update failed", HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        return new ResponseEntity<>("update done successfully", HttpStatus.OK);
+    }
+
+
+    @PatchMapping("/publicationCommunity/{publicationCommunity}")
+    public ResponseEntity<?> updatePublicationCommunity(@PathVariable("publicationCommunity") Long publicationCommunityId, @RequestBody PieceJoint[] pieceJoints) {
+        for(PieceJoint pieceJoint : pieceJoints){
+            Optional<PieceJoint> updatedPieceJoint = pieceJointServiceImpl.getPieceJoint(pieceJoint.getId());
+            if (updatedPieceJoint.isPresent()) {
+                pieceJointServiceImpl.updatePieceJointCommunity(updatedPieceJoint.get(), publicationCommunityId);
             }
             else {
                 return new ResponseEntity<>("update failed", HttpStatus.BAD_REQUEST);

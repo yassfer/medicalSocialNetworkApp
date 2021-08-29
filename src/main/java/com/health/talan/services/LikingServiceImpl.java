@@ -1,10 +1,7 @@
 package com.health.talan.services;
 
+import com.health.talan.entities.*;
 import com.health.talan.repositories.LikingRepo;
-import com.health.talan.entities.Liking;
-import com.health.talan.entities.Publication;
-import com.health.talan.entities.PublicationChallenge;
-import com.health.talan.entities.User;
 import com.health.talan.services.serviceInterfaces.LikingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,14 +16,18 @@ public class LikingServiceImpl implements LikingService {
         private final UserServiceImpl userServiceImpl;
         private final PublicationServiceImpl publicationServiceImpl;
         private final PublicationChallengeServiceImpl publicationChallengeServiceImpl;
+        private final PublicationCommunityServiceImpl publicationCommunityServiceImpl;
+
         @Autowired
         public LikingServiceImpl(LikingRepo likingRepo, UserServiceImpl userServiceImpl, 
-        		PublicationServiceImpl publicationServiceImpl, PublicationChallengeServiceImpl publicationChallengeServiceImpl){
+        		PublicationServiceImpl publicationServiceImpl, PublicationChallengeServiceImpl publicationChallengeServiceImpl,
+                                 PublicationCommunityServiceImpl publicationCommunityServiceImpl){
 
             this.likingRepo = likingRepo;
             this.userServiceImpl = userServiceImpl;
             this.publicationServiceImpl = publicationServiceImpl;
             this.publicationChallengeServiceImpl= publicationChallengeServiceImpl;
+            this.publicationCommunityServiceImpl = publicationCommunityServiceImpl;
         }
 
         @Override
@@ -82,6 +83,19 @@ public class LikingServiceImpl implements LikingService {
             Liking newLike = likingRepo.save(like);
             return newLike;
         }
+
+
+    //Save Like For Publication Community
+    @Override
+    public Liking saveLikeCommunity(Long userId, Long pubId){
+        Liking like = new Liking();
+        Optional<User> user = userServiceImpl.getUserById(userId);
+        Optional<PublicationCommunity> publicationCommunity = publicationCommunityServiceImpl.getPublicationById(pubId);
+        like.setPublicationCommunity(publicationCommunity.get());
+        like.setUser(user.get());
+        Liking newLike = likingRepo.save(like);
+        return newLike;
+    }
 
         @Override
         public String deleteLiking(Long id){

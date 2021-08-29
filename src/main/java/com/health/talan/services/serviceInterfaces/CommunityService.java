@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.health.talan.entities.Comment;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +39,6 @@ public interface CommunityService {
 	public List<Community> getUnfollowedCommunity(Long id) throws IOException;
 
 	public Community addCommunityWithPiece(Long idAdmin, MultipartFile file) throws IOException ;
-
 
 
 

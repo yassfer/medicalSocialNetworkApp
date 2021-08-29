@@ -35,8 +35,9 @@ public class Challenge implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "id_adminChallenge")
 	private User adminChallenge;
-	//@JsonIgnore
-	@OneToMany(mappedBy = "challenge", fetch = FetchType.EAGER)
+
+
+	@OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
 	private Set<PublicationChallenge> PublicationChallenge = new HashSet<>();
 	
 	public Challenge() {

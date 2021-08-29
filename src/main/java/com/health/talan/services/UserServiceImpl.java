@@ -39,6 +39,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public Optional<User> getUserByMail(String mail) {
+		Optional<User> user = userRepo.findByMail(mail);
+		return Optional.ofNullable(user.orElse(null));
+	}
+
+	@Override
 	public String deleteUser(Long id) {
 		Optional<User> user = userRepo.findById(id);
 		if (user.isPresent()) {

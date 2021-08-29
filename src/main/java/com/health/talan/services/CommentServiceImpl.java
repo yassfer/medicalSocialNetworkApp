@@ -1,5 +1,6 @@
 package com.health.talan.services;
 
+import com.health.talan.entities.PublicationCommunity;
 import com.health.talan.repositories.CommentRepo;
 import com.health.talan.entities.Comment;
 import com.health.talan.entities.Publication;
@@ -17,13 +18,16 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepo commentRepo;
     private final UserServiceImpl userServiceImpl;
     private final PublicationServiceImpl publicationServiceImpl;
+    private final PublicationCommunityServiceImpl publicationCommunityServiceImpl;
 
     @Autowired
-    public CommentServiceImpl(CommentRepo commentRepo, UserServiceImpl userServiceImpl, PublicationServiceImpl publicationServiceImpl){
+    public CommentServiceImpl(CommentRepo commentRepo, UserServiceImpl userServiceImpl, PublicationServiceImpl publicationServiceImpl,
+                              PublicationCommunityServiceImpl publicationCommunityServiceImpl){
 
         this.commentRepo = commentRepo;
         this.userServiceImpl = userServiceImpl;
         this.publicationServiceImpl = publicationServiceImpl;
+        this.publicationCommunityServiceImpl = publicationCommunityServiceImpl;
     }
 
     @Override
@@ -76,6 +80,21 @@ public class CommentServiceImpl implements CommentService {
         Comment newComment = commentRepo.save(comment);
         return newComment;
     }
+
+    @Override
+    public Comment saveCommentPubCommunity(Comment comment, Long userId, Long pubId){
+        Optional<User> user = userServiceImpl.getUserById(userId);
+        comment.setUser(user.get());
+
+        Optional<PublicationCommunity> publication = publicationCommunityServiceImpl.getPublicationById(pubId);
+        comment.setPublicationCommunity(publication.get());
+
+        Comment newComment = commentRepo.save(comment);
+        return newComment;
+    }
+
+
+
 
 
     @Override

@@ -163,8 +163,8 @@ public class PublicationChallengeServiceImpl implements PublicationChallengeServ
     public String deletePublicationChallenge(Long id){
         Optional<PublicationChallenge> publicationChallenge = publicationChallengeRepo.findById(id);
         if(publicationChallenge.isPresent()){
-            likingRepo.deleteByPublicationId(id);
-            pieceJointRepo.deleteByPublicationId(id);
+            likingRepo.deleteByPublicationChallengeId(id);
+            pieceJointRepo.deleteByPublicationChallengeId(id);
             publicationChallengeRepo.deleteById(id);
             return "Challenge Publication Deleted";
         }

@@ -2,10 +2,8 @@ package com.health.talan.entities;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -35,6 +33,10 @@ public class Comment implements Serializable {
 	@JoinColumn(name = "id_publication")
 	private Publication publication;
 
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+	@JoinColumn(name = "publicationCommunity")
+	private PublicationCommunity publicationCommunity;
 
 
 
@@ -103,11 +105,23 @@ public class Comment implements Serializable {
 	}
 
 
+	public PublicationCommunity getPublicationCommunity() {
+		return publicationCommunity;
+	}
+
+	public void setPublicationCommunity(PublicationCommunity publicationCommunity) {
+		this.publicationCommunity = publicationCommunity;
+	}
+
 	@Override
 	public String toString() {
-		return "Comment [id=" + id + ", content=" + content + ", date=" + date + ", publication=" + publication
-				+ ", user=" + user + "]";
+		return "Comment{" +
+				"id=" + id +
+				", content='" + content + '\'' +
+				", date=" + date +
+				", publication=" + publication +
+				", publicationCommunity=" + publicationCommunity +
+				", user=" + user +
+				'}';
 	}
-	
-	
 }

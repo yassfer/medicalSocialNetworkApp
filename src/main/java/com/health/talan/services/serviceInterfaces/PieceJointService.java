@@ -22,9 +22,14 @@ public interface PieceJointService {
 
     public PieceJoint store2(MultipartFile pieceJoint) throws IOException;
 
+    public PieceJoint storePieceJustif(MultipartFile pieceJoint, String userMail) throws IOException;
+
     public PieceJoint updatePieceJoint2(PieceJoint pieceJoint);
 
     public PieceJoint updatePieceJointChallenge(PieceJoint pieceJoint, Long pubChallengeId);
+
+    public PieceJoint updatePieceJointCommunity(PieceJoint pieceJoint, Long pubCommunityId);
+
 
 
 }

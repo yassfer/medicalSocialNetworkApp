@@ -7,7 +7,6 @@ import com.health.talan.services.PublicationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.xml.ws.ResponseWrapper;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @Controller
@@ -50,18 +48,16 @@ public class PublicationController {
 	}
 
 	@GetMapping("/user/{userId}")
-	public ResponseEntity<?> getAllPublicationsByUserId(@PathVariable("userId") Long userId) {
+	@ResponseBody
+	public List<Publication> getAllPublicationsByUserId(@PathVariable("userId") Long userId) {
 
-		Optional<List<Publication>> publications = publicationServiceImpl.getPublicationByUserId(userId);
-		if (publications.isPresent()) {
-			for (Publication publication : publications.get()) {
-				for (PieceJoint pieceJoint : publication.getPieceJoints()) {
-					pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
-				}
+		List<Publication> publications = publicationServiceImpl.getPublicationByUserId(userId);
+		for (Publication publication : publications) {
+			for (PieceJoint pieceJoint : publication.getPieceJoints()) {
+				pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
 			}
-			return new ResponseEntity<>(publications, HttpStatus.OK);
 		}
-		return new ResponseEntity<>("that user have no publications", HttpStatus.OK);
+		return publications;
 	}
 
 	@PostMapping("/{userId}")

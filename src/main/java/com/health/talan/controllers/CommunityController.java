@@ -124,7 +124,7 @@ public class CommunityController {
 	@PreAuthorize("hasAuthority('USER')")
 	@PutMapping(value = "/uploadImage/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
-	public void uplaodImage(@PathVariable("id") String id, @RequestParam("imageFile") MultipartFile file)
+	public void uploadImage(@PathVariable("id") String id, @RequestParam("imageFile") MultipartFile file)
 			throws IOException {
 		CommunityService.uplaodImage(id, file);
 	}

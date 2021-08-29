@@ -35,4 +35,6 @@ public interface UserService {
     public ResponseEntity<?> updateUserProfile(Long id, User user);
 
     public User updateScore(long idu, int score);
+
+    public Optional<User> getUserByMail(String mail);
 }

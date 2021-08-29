@@ -1,7 +1,10 @@
 package com.health.talan.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -41,6 +44,11 @@ public class Community implements Serializable{
 			joinColumns = @JoinColumn(name = "community_id"),
 			inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<User> participants;
+
+	
+	@OneToMany(mappedBy = "community", cascade = CascadeType.ALL)
+	private Set<PublicationCommunity> publicationCommunity = new HashSet<>();
+
 
 	public Long getId() {
 		return id;

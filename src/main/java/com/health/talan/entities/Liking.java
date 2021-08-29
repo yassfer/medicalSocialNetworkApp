@@ -37,6 +37,11 @@ public class Liking implements Serializable {
 	private PublicationChallenge publicationChallenge;
 
 
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+	@JoinColumn(name = "publicationCommunity")
+	private PublicationCommunity publicationCommunity;
+
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user")
 	private User user;
@@ -102,11 +107,23 @@ public class Liking implements Serializable {
 	}
 
 
+	public PublicationCommunity getPublicationCommunity() {
+		return publicationCommunity;
+	}
+
+	public void setPublicationCommunity(PublicationCommunity publicationCommunity) {
+		this.publicationCommunity = publicationCommunity;
+	}
+
 	@Override
 	public String toString() {
-		return "Liking [id=" + id + ", date=" + date + ", publication=" + publication + ", publicationChallenge="
-				+ publicationChallenge + ", user=" + user + "]";
+		return "Liking{" +
+				"id=" + id +
+				", date=" + date +
+				", publication=" + publication +
+				", publicationChallenge=" + publicationChallenge +
+				", publicationCommunity=" + publicationCommunity +
+				", user=" + user +
+				'}';
 	}
-	
-	
 }

@@ -35,8 +35,11 @@ public class EntrepriseServiceImpl implements EntrepriseServices {
 
     @Override
     public List<Entreprise> GetAllEntreprise() throws IOException {
-
-        return (List<Entreprise>)entrepriseRepository.findAll();
+        List<Entreprise> Entreprises = (List<Entreprise>) entrepriseRepository.findAll();
+        for (Entreprise Entreprise : Entreprises) {
+            Entreprise.setImage(decompressBytes(Entreprise.getImage()));
+        }
+        return Entreprises;
     }
     @Override
     public Entreprise setEntreprise (Entreprise ent) throws IOException {
@@ -71,15 +74,6 @@ public class EntrepriseServiceImpl implements EntrepriseServices {
         return Entreprise;
     }
 
-    // Display all
-    @Override
-    public List<Entreprise> getAll() throws IOException {
-        List<Entreprise> Entreprises = (List<Entreprise>) entrepriseRepository.findAll();
-        for (Entreprise Entreprise : Entreprises) {
-            Entreprise.setImage(Entreprise.getImage());
-        }
-        return Entreprises;
-    }
 
     // Save Entreprise
     public void saveEntreprise(Long id, Entreprise Entreprise) {

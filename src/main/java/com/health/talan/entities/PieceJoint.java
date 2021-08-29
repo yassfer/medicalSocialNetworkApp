@@ -38,6 +38,10 @@ public class PieceJoint implements Serializable {
     private byte[] data;
 
 
+    @OneToOne
+    private User user;
+
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "publication_pieceJoint")
     private Publication publication;
@@ -46,6 +50,11 @@ public class PieceJoint implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "publicationChallenge_pieceJoint")
     private PublicationChallenge publicationChallenge;
+
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "publicationCommunity")
+    private PublicationCommunity publicationCommunity;
 
 
     public PieceJoint() {
@@ -137,12 +146,35 @@ public class PieceJoint implements Serializable {
         this.publicationChallenge = publicationChallenge;
     }
 
-	@Override
-	public String toString() {
-		return "PieceJoint [id=" + id + ", name=" + name + ", size=" + size + ", contentType=" + contentType + ", url="
-				+ url + ", data=" + Arrays.toString(data) + ", publication=" + publication + ", publicationChallenge="
-				+ publicationChallenge + "]";
-	}
-    
-    
+    public PublicationCommunity getPublicationCommunity() {
+        return publicationCommunity;
+    }
+
+    public void setPublicationCommunity(PublicationCommunity publicationCommunity) {
+        this.publicationCommunity = publicationCommunity;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "PieceJoint{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", size=" + size +
+                ", contentType='" + contentType + '\'' +
+                ", url='" + url + '\'' +
+                ", data=" + Arrays.toString(data) +
+                ", user=" + user +
+                ", publication=" + publication +
+                ", publicationChallenge=" + publicationChallenge +
+                ", publicationCommunity=" + publicationCommunity +
+                '}';
+    }
 }

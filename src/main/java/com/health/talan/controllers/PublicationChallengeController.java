@@ -1,6 +1,9 @@
 package com.health.talan.controllers;
 
+import com.health.talan.entities.PieceJoint;
+import com.health.talan.entities.Publication;
 import com.health.talan.entities.PublicationChallenge;
+import com.health.talan.services.ChallengeService;
 import com.health.talan.services.PublicationChallengeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,11 +20,13 @@ import java.util.Optional;
 public class PublicationChallengeController {
 
 	private final PublicationChallengeServiceImpl publicationChallengeServiceImpl;
+	private final ChallengeService challengeService;
 
 	@Autowired
-	public PublicationChallengeController(PublicationChallengeServiceImpl publicationChallengeServiceImpl) {
+	public PublicationChallengeController(ChallengeService challengeService, PublicationChallengeServiceImpl publicationChallengeServiceImpl) {
 
 		this.publicationChallengeServiceImpl = publicationChallengeServiceImpl;
+		this.challengeService = challengeService;
 	}
 
 	@GetMapping("/all")
@@ -70,6 +75,11 @@ public class PublicationChallengeController {
 		Optional<List<PublicationChallenge>> Challengepublications = publicationChallengeServiceImpl
 				.getPublicationChallengeByApprouved(true, challengeId);
 		if (Challengepublications.isPresent()) {
+			for (PublicationChallenge publication : Challengepublications.get()) {
+				for (PieceJoint pieceJoint : publication.getPieceJoints()) {
+					pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
+				}
+			}
 			return new ResponseEntity<>(Challengepublications, HttpStatus.OK);
 		}
 		return new ResponseEntity<>("that challenge have no challengePublications", HttpStatus.OK);
@@ -171,7 +181,12 @@ public class PublicationChallengeController {
 
 	@GetMapping("/notApprouved/{challengePublicationId}")
     public ResponseEntity<?> getPublicationChallengeByApprouved(@PathVariable("challengePublicationId") Long challengePublicationId){
-        Optional<List<PublicationChallenge>> pub = publicationChallengeServiceImpl.getPublicationChallengeByApprouved(false,challengePublicationId);
+        List<PublicationChallenge> pub = publicationChallengeServiceImpl.getPublicationChallengeByApprouved(false,challengePublicationId).get();
+		for (PublicationChallenge publication : pub) {
+			for (PieceJoint pieceJoint : publication.getPieceJoints()) {
+				pieceJoint.setData(challengeService.decompressBytes(pieceJoint.getData()));
+			}
+		}
         return new ResponseEntity<>(pub, HttpStatus.OK);
     }
 	

@@ -78,6 +78,13 @@ public class CommentController {
         return new ResponseEntity<>(newComment, HttpStatus.OK);
     }
 
+    @PostMapping("user/{userId}/pubCommunity/{pubId}")
+    public ResponseEntity<Comment> addCommentPubCommunity(@RequestBody Comment comment, @PathVariable("userId") Long userId, @PathVariable("pubId") Long pubId) {
+
+        Comment newComment = commentServiceImpl.saveCommentPubCommunity(comment, userId, pubId);
+        return new ResponseEntity<>(newComment, HttpStatus.OK);
+    }
+
 
     @PatchMapping("/{id}/user/{userId}/pub/{pubId}")
     public ResponseEntity<?> updatePublication(@PathVariable("id") Long id, @PathVariable("userId") Long userId,

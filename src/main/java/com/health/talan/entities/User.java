@@ -71,8 +71,8 @@ public class User implements Serializable {
 	private Set<Interest> interests = new HashSet<>();
 
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	private Set<PieceJustif> pieceJustifs = new HashSet<>();
+	@OneToOne
+	private PieceJoint pieceJustifs;
 
 	@JsonIgnore
 	@ManyToMany
@@ -125,6 +125,12 @@ public class User implements Serializable {
 	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<PublicationChallenge> publicationChallenges = new HashSet<>();
+
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private Set<PublicationCommunity> publicationCommunity = new HashSet<>();
+
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
@@ -265,11 +271,11 @@ public class User implements Serializable {
 		this.interests = interests;
 	}
 
-	public Set<PieceJustif> getPieceJustifs() {
+	public PieceJoint getPieceJustifs() {
 		return pieceJustifs;
 	}
 
-	public void setPieceJustifs(Set<PieceJustif> pieceJustifs) {
+	public void setPieceJustifs(PieceJoint pieceJustifs) {
 		this.pieceJustifs = pieceJustifs;
 	}
 
@@ -401,6 +407,14 @@ public class User implements Serializable {
 		this.score = score;
 	}
 
+	public Set<PublicationCommunity> getPublicationCommunity() {
+		return publicationCommunity;
+	}
+
+	public void setPublicationCommunity(Set<PublicationCommunity> publicationCommunity) {
+		this.publicationCommunity = publicationCommunity;
+	}
+
 	@Override
 	public String toString() {
 		return "User{" +
@@ -433,6 +447,7 @@ public class User implements Serializable {
 				", publications=" + publications +
 				", myChallenge=" + myChallenge +
 				", publicationChallenges=" + publicationChallenges +
+				", publicationCommunity=" + publicationCommunity +
 				", likes=" + likes +
 				", comments=" + comments +
 				'}';

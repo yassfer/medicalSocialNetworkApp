@@ -27,4 +27,9 @@ public interface PieceJointRepo extends JpaRepository<PieceJoint, Long> {
     @Modifying
     @Query("DELETE from PieceJoint p where p.publicationChallenge.id = ?1")
     void deleteByPublicationChallengeId(Long id);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE from PieceJoint p where p.publicationCommunity.id = ?1")
+    void deleteByPublicationCommunityId(Long id);
 }

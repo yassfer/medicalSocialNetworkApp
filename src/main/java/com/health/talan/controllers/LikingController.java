@@ -67,6 +67,15 @@ public class LikingController {
 		Liking newLike = likingServiceImpl.saveLikeChallenge(userId, pubId);
 		return new ResponseEntity<>(newLike, HttpStatus.OK);
 	}
+
+
+	//Create Like For Publication Community
+	@GetMapping("likeCommunity/{userId}/{pubId}")
+	public ResponseEntity<Liking> addLikePubCommunity(@PathVariable("userId") Long userId, @PathVariable("pubId") Long pubId) {
+
+		Liking newLike = likingServiceImpl.saveLikeCommunity(userId, pubId);
+		return new ResponseEntity<>(newLike, HttpStatus.OK);
+	}
 	
 	@DeleteMapping("/user/{userId}/publication/{publicationId}")
 	public ResponseEntity<?> deleteLikeByUserAndPublication(@PathVariable("userId") Long userId,

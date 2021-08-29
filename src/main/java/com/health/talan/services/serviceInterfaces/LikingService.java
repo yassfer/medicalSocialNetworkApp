@@ -21,4 +21,6 @@ public interface LikingService {
     
     public Liking saveLikeChallenge(Long userId, Long pubId);
 
+    public Liking saveLikeCommunity(Long userId, Long pubId);
+
 }

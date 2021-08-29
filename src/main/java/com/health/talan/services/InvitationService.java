@@ -50,7 +50,8 @@ public class InvitationService {
                 }
                 if (hourDiff < 0) {
                     hourDiff = 24 + hourDiff;
-                }invitation.setSince(hourDiff + " hours and " + minutesDiff + " minutes ago");
+                }
+                invitation.setSince(hourDiff + " hours and " + minutesDiff + " minutes ago");
             } else {
                 invitation.setSince(diff + " days ago");
             }
@@ -58,7 +59,7 @@ public class InvitationService {
         return Optional.ofNullable(invitations).orElse(null);
     }
 
-    public void deleteInvitation (Long idInvitation) {
+    public void deleteInvitation(Long idInvitation) {
         invitationRepository.deleteById(idInvitation);
     }
 
@@ -75,41 +76,47 @@ public class InvitationService {
         invitationRepository.save(invi);
     }
 
-    public void acceptInvitation (Long userId, Long inviId) {
-        User user = this.userRepository.findById(userId).get();
+    public void acceptInvitation(Long userId, Long inviId) {
+        //User user = this.userRepository.findById(userId).get();
         Invitation invi = invitationRepository.findById(inviId).get();
         User sender = invi.getSender();
         User user2 = userRepository.findById(invi.getReceiver().getId()).get();
         Set<User> friends2 = user2.getFriends();
-        friends2.add(user);
+        friends2.add(sender);
         userRepository.save(user2);
-        Set<User> friends = user.getFriends();
-        friends.add(sender);
-        user.setFriends(friends);
-        userRepository.save(user);
+        Set<User> friends = sender.getFriends();
+        friends.add(user2);
+        sender.setFriends(friends);
+        userRepository.save(sender);
         invitationRepository.deleteById(inviId);
     }
-    
-    public void acceptInvitationByUser (Long idSender, Long idReceiver) {
+
+    public void acceptInvitationByUser(Long idSender, Long idReceiver) {
         User sender = this.userRepository.findById(idSender).get();
         User receiver = this.userRepository.findById(idReceiver).get();
-        
+
         Invitation invi = invitationRepository.findInvitation(sender, receiver);
+        System.out.println("inv=> " + invi.getId());
         Set<User> friendsS = sender.getFriends();
         friendsS.add(receiver);
         sender.setFriends(friendsS);
+        userRepository.save(sender);
         Set<User> friendsR = receiver.getFriends();
         friendsR.add(sender);
         receiver.setFriends(friendsR);
-        
-        userRepository.save(sender);
         userRepository.save(receiver);
         invitationRepository.deleteById(invi.getId());
     }
 
-    public List<Invitation> getAllBySender(Long id){
-        User user = userRepository.findById(id).get();
-        return invitationRepository.findBySender(user);
+    public void refuseInvitationByUser(Long idSender, Long idReceiver) {
+        User sender = this.userRepository.findById(idSender).get();
+        User receiver = this.userRepository.findById(idReceiver).get();
+
+        Invitation invi = invitationRepository.findInvitation(sender, receiver);
+        invitationRepository.deleteById(invi.getId());
     }
 
+    public List<Invitation> getAllInvitations() {
+        return invitationRepository.findAll();
+    }
 }

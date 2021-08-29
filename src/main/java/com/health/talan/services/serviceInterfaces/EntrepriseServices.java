@@ -13,7 +13,6 @@ public interface EntrepriseServices {
 
     public void uplaodImage(String id, MultipartFile file) throws IOException;
     public Entreprise getByAdmin() throws IOException;
-    public List<Entreprise> getAll() throws IOException;
     public void saveEntreprise(Long id, Entreprise Entreprise);
     public Entreprise addEntrepriseWithPiece(Long idAdmin, MultipartFile file) throws IOException;
 

@@ -50,9 +50,9 @@ public class PublicationServiceImpl implements PublicationService {
 
 
     @Override
-    public Optional<List<Publication>> getPublicationByUserId(Long userId){
-
-        return Optional.ofNullable(publicationRepo.findByUserId(userId)).orElse(null);
+    public List<Publication> getPublicationByUserId(Long userId){
+        Optional<User> user = userServiceImpl.getUserById(userId);
+        return publicationRepo.getByUserByDate(user.get());
     }
 
 
