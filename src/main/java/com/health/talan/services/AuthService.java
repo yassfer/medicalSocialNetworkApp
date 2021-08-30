@@ -103,7 +103,8 @@ public class AuthService {
 		// Creating user's account
 		User user = new User(signUpRequest.getFirstName(), signUpRequest.getLastName(), signUpRequest.getMail(),
 				signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()), signUpRequest.getBirthDate(),
-				signUpRequest.getAddress(), signUpRequest.getProfession(), signUpRequest.isProfessionnalisme(), null);
+				signUpRequest.getAddress(), signUpRequest.getProfession(), signUpRequest.isProfessionnalisme(), null,
+				signUpRequest.getType());
 		user.setScore(0);
 		user.setConnected(false);
 		File resource = new ClassPathResource("user-profile.jpg").getFile();

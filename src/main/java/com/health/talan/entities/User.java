@@ -72,7 +72,7 @@ public class User implements Serializable {
 
 	@JsonIgnore
 	@OneToOne
-	private PieceJoint pieceJustifs;
+	private PieceJoint pieceJustifs = new PieceJoint();
 
 	@JsonIgnore
 	@ManyToMany
@@ -140,12 +140,16 @@ public class User implements Serializable {
 	@OneToMany(mappedBy = "user")
 	private Set<Comment> comments = new HashSet<>();
 
+	private boolean verified = false;
+
+	private boolean type = false;
+
 	public User() {
 		super();
 	}
 
 	public User(String firstName, String lastName, String mail, String username, String password, Date birthDate,
-				String address, String profession, boolean professionnalisme, User recommander) {
+				String address, String profession, boolean professionnalisme, User recommander, boolean type) {
 
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -157,6 +161,7 @@ public class User implements Serializable {
 		this.profession = profession;
 		this.professionnalisme = professionnalisme;
 		this.recommander= recommander;
+		this.type = type;
 	}
 
 	public Long getId() {
@@ -287,6 +292,14 @@ public class User implements Serializable {
 		this.friends = friends;
 	}
 
+	public boolean getType() {
+		return type;
+	}
+
+	public void setType(boolean type) {
+		this.type = type;
+	}
+
 	public Set<Community> getMyCommunities() {
 		return myCommunities;
 	}
@@ -415,6 +428,14 @@ public class User implements Serializable {
 		this.publicationCommunity = publicationCommunity;
 	}
 
+    public boolean getVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
 	@Override
 	public String toString() {
 		return "User{" +
@@ -450,6 +471,8 @@ public class User implements Serializable {
 				", publicationCommunity=" + publicationCommunity +
 				", likes=" + likes +
 				", comments=" + comments +
+				", verified=" + verified +
+				", type=" + type +
 				'}';
 	}
 }

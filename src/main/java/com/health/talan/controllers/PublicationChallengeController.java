@@ -107,6 +107,10 @@ public class PublicationChallengeController {
 				return new ResponseEntity<>("Only the owner of the challenge can approuve", HttpStatus.OK);
 			} else {
 				pub.get().setApprouved(true);
+				if(pub.get().getChallenge().getAdminChallenge().getType()){
+					pub.get().getUser().setScore(pub.get().getUser().getScore()+1);
+				}
+
 				publicationChallengeServiceImpl.updatePublicationChallenge(pub.get());
 				return new ResponseEntity<>(pub, HttpStatus.OK);
 			}

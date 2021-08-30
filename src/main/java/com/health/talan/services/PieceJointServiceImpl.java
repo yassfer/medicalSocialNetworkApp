@@ -59,6 +59,7 @@ public class PieceJointServiceImpl implements PieceJointService {
 				compressBytes(pieceJoint.getBytes()), (int) pieceJoint.getSize());
 		Optional<User> user = userServiceImpl.getUserByMail(userMail);
 		pieceJoint1.setUser(user.get());
+		user.get().setVerified(true);
 		user.get().setPieceJustifs(pieceJoint1);
 
 		return pieceJointRepo.save(pieceJoint1);

@@ -95,9 +95,9 @@ public class PublicationController {
 	
 	@GetMapping("/getAllByDate")
 	@ResponseBody
-	public Set<Publication> getAllPublicationsByData() {
+	public List<Publication> getAllPublicationsByDate() {
 
-		Set<Publication> publications = publicationServiceImpl.getAllByDate();
+		List<Publication> publications = publicationServiceImpl.getAllByDate();
 		
 			for (Publication publication : publications) {
 				for (PieceJoint pieceJoint : publication.getPieceJoints()) {

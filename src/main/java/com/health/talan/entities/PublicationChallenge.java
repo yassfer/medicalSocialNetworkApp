@@ -22,9 +22,13 @@ public class PublicationChallenge implements Serializable {
 	private Long id;
 
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@Column(name = "dateCreation")
-	private Date dateCreation = new Date();
+	private Date dateCreation = new Date(System.currentTimeMillis());
+
+	@Temporal(TemporalType.TIME)
+	@Column(name = "time")
+	private Date time = new Date(System.currentTimeMillis());
 
 
 	@Column(name = "content")

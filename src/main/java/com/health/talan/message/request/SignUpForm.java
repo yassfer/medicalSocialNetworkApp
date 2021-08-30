@@ -25,6 +25,8 @@ public class SignUpForm {
 
 	private Set role;
 
+	private boolean type = false;
+
 	@NotBlank
 	@Size(min = 6, max = 40)
 	private String password;
@@ -113,6 +115,14 @@ public class SignUpForm {
 
 	public void setProfessionnalisme(boolean professionnalisme) {
 		this.professionnalisme = professionnalisme;
+	}
+
+	public boolean getType() {
+		return type;
+	}
+
+	public void setType(boolean type) {
+		this.type = type;
 	}
 
 	public String getRecommander() {

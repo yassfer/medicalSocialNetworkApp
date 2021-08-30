@@ -9,6 +9,7 @@ import com.health.talan.entities.Publication;
 import com.health.talan.entities.User;
 import com.health.talan.services.serviceInterfaces.PublicationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -91,8 +92,8 @@ public class PublicationServiceImpl implements PublicationService {
         }
     }
 
-    public Set<Publication> getAllByDate(){
+    public List<Publication> getAllByDate(){
 
-        return publicationRepo.getAllByDate();
+        return publicationRepo.findAll(Sort.by("dateCreation").descending().and(Sort.by("time").descending()));
     }
 }

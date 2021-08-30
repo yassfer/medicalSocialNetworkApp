@@ -32,9 +32,11 @@ public class Challenge implements Serializable {
 	@Column(name= "createdAt")
 	private Date createdAt;
 
+
 	@ManyToOne
 	@JoinColumn(name = "id_adminChallenge")
 	private User adminChallenge;
+
 
 
 	@OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
